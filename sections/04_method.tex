@@ -1,0 +1,81 @@
+% !TEX root = ../paper.tex
+
+\section{Method}
+
+\subsection{Problem Formulation}
+
+We study RGB-thermal registration at the scene level rather than as an isolated pairwise matching
+task. For each scene, the input is a set of paired RGB and thermal UAV frames
+$S = \{(I_i^R, I_i^T)\}_{i=1}^N$, where viewpoint variation, cross-resolution sensing, thermal
+appearance changes, and day/night conditions make individual frame estimates uneven in quality. The
+goal is to recover a thermal-to-RGB homography that remains usable at the scene level, or to reject
+the scene when the evidence is not reliable enough.
+
+This formulation differs from treating registration as a single best-pair problem. In our setting,
+many scenes already contain some usable pairwise correspondences, but the central challenge is to
+convert those imperfect frame-level estimates into a transform that is geometrically stable,
+internally consistent, and acceptable under a reliability-aware QA criterion.
+
+\subsection{Pairwise Backbone and Candidate Scheduling}
+
+UAV-TAlign builds on a strong off-the-shelf multimodal matcher rather than introducing a new
+matching backbone. In the current PRCV pipeline, the default backend is the MINIMA family with the
+RoMa branch, while the rest of the pipeline remains agnostic to the exact pairwise matcher.
+
+At the scene level, the system does not assume that all frames should be treated equally from the
+start. It first constructs a candidate-count schedule that expands progressively with scene size.
+The implementation uses a ratio-based schedule with an initial candidate ratio, a ratio step, and a
+maximum ratio; if needed, it can expand to all frames. For small scenes, the pipeline directly
+evaluates all available frames. This scheduling policy allows the system to stop early when the
+scene is already stable, while still escalating to broader evidence when the current subset is not
+sufficient.
+
+Within each candidate stage, representative frames are selected using deterministic evenly
+distributed sampling by default. A random-selection variant exists for sensitivity analysis, but
+the default paper-facing interpretation is reproducibility rather than superiority: deterministic
+selection is used to reduce seed-dependent drift and to preserve more uniform scene coverage.
+
+\subsection{Frame-Level Geometry Estimation and Acceptance}
+
+For each selected frame pair, the matcher produces cross-modal correspondences that are filtered
+into a frame-level homography estimate. The current implementation evaluates each frame using
+standard geometric statistics, including the number of matches, the number of inliers, inlier
+ratio, reprojection error, and spatial coverage. A frame enters the global candidate pool only when
+it passes a minimum-quality gate on these statistics.
+
+Beyond a binary accept/reject decision, the pipeline assigns each accepted frame a quality score so
+that better-supported homographies receive more influence during scene aggregation. The score is a
+weighted combination of inlier ratio, spatial coverage, reprojection quality, matcher confidence,
+and inlier count. This keeps the scene-level estimate from being dominated by weak but technically
+accepted frames.
+
+\subsection{Scene-Level Robust Aggregation}
+
+Once enough frame-level homographies have been accepted, UAV-TAlign aggregates them into a
+scene-level transform. The default aggregation mode is robust weighted aggregation. In the current
+implementation, homographies are first mapped into parameter space, centered with a median
+reference, and filtered by a median-absolute-deviation rule to suppress outliers before weighted
+averaging. The retained homographies are then combined using the previously defined frame quality
+scores.
+
+The pipeline records stability diagnostics around the aggregate transform, including the dispersion
+of each accepted homography relative to the aggregate and the ratio of robustly rejected frame-level
+estimates. These diagnostics are later used both for scene-level stopping decisions and for the
+baseline-aware QA stage.
+
+\subsection{QA-Aware Scene Acceptance}
+
+The final decision is not based only on whether some frames matched successfully. Instead,
+UAV-TAlign evaluates the optimized scene-level transform against a label-free QA summary computed on
+representative frames. The current summary uses cross-modal proxy signals such as edge-overlap
+improvement, gradient-NCC improvement, the ratio of improved frames, and the count of severe
+relative outliers. It also retains scene-level match and stability statistics such as accepted-frame
+ratio, mean inlier ratio, mean reprojection error, spatial coverage, dispersion relative to the
+aggregate transform, and the robust reject ratio.
+
+The implementation keeps the original hard gate as \texttt{legacy\_pass}, but the formal PRCV
+decision uses a baseline-aware three-way status: \texttt{pass}, \texttt{pass\_with\_warning}, or
+\texttt{fail}. The warning path is intentionally narrow. It is only available when the baseline
+transform is weak, the modality gap is high, the accepted-frame statistics remain strong, the
+aggregated homography is stable, the baseline-relative severe-outlier ratio stays within limits,
+and the transform still improves gradient-based alignment beyond configured floors.

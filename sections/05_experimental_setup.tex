@@ -1,0 +1,56 @@
+% !TEX root = ../paper.tex
+
+\section{Experimental Setup}
+
+\subsection{Baselines}
+
+We evaluate both classical and learning-based baselines under an explicit off-the-shelf setting.
+All learning-based methods use public pretrained weights or public pretrained model interfaces, and
+none of the baselines are retrained or fine-tuned on UAV-TAlign-1K. This choice keeps the
+comparison focused on practical deployability rather than dataset-specific adaptation.
+
+The classical baselines are SIFT + RANSAC and AKAZE + RANSAC. The deep pairwise baselines are
+Kornia LoFTR (pretrained="outdoor"), official pretrained RoMa via local wrapper, official
+pretrained XoFTR-640 via local wrapper, and raw MINIMA. Raw MINIMA uses the MINIMA RoMa branch in
+its direct pairwise form, without the scene-level candidate selection, robust multi-frame
+aggregation, or QA-aware decision logic introduced by UAV-TAlign.
+
+\subsection{Shared Geometric Fitting}
+
+For the pairwise methods, the common downstream step is homography fitting from the predicted
+correspondences. After each matcher returns point pairs and optional confidence values, the
+evaluation script estimates a homography with a shared robust backend and then records a unified
+status code such as \texttt{ok}, \texttt{fit\_failed}, \texttt{insufficient\_matches},
+\texttt{no\_matches}, or \texttt{error}. This unified post-processing is important because it makes
+the pairwise baseline table comparable at the level of usable registration outcomes rather than raw
+matcher outputs alone.
+
+The current homography fitting backend uses the same configuration across pairwise baselines:
+\begin{itemize}
+\item robust fitting method: USAC-MAGSAC;
+\item reprojection threshold: 3.0;
+\item confidence: 0.999;
+\item maximum iterations: 10000;
+\item spatial coverage grid: $4 \times 4$.
+\end{itemize}
+
+\subsection{Frozen Baseline Choices}
+
+The current frozen main-table baseline choices are as follows. Raw MINIMA uses the MINIMA RoMa
+backend with the \texttt{minima\_roma} checkpoint family and the large/full RoMa branch. Official
+pretrained RoMa via local wrapper uses the public outdoor RoMa model. Official pretrained
+XoFTR-640 via local wrapper uses the 640-resolution XoFTR checkpoint family as the default main
+table XoFTR setting. Kornia LoFTR (pretrained="outdoor") uses the public pretrained outdoor model
+from Kornia.
+
+\subsection{Runtime Details}
+
+The formal LoFTR result is obtained under a resize-aware inference setting. In the current full-run
+configuration, the longest image dimension used for matching is limited to 1600, and automatic
+mixed precision is disabled. This is a deployment-oriented memory-control choice, not a training
+modification or a special adaptation on UAV-TAlign-1K.
+
+All experiments reported in this draft were run in a Linux Conda environment with Python 3.10,
+PyTorch 2.0.1, torchvision 0.15.2, and CUDA 11.8. The repository-level experiment runners also
+enforce output-root isolation so that raw dataset directories and source trees are treated as
+read-only inputs during evaluation.

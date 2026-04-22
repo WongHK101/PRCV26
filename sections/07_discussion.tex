@@ -1,0 +1,28 @@
+% !TEX root = ../paper.tex
+
+\section{Discussion}
+
+The current results suggest that pairwise matcher availability is no longer the primary bottleneck
+on UAV-TAlign-1K. Strong off-the-shelf multimodal matchers already succeed on most individual
+pairs, yet scene-level canonical passes remain far from saturated. This shift in the bottleneck
+motivates UAV-TAlign as a reliability-oriented pipeline built around candidate selection,
+aggregation, and QA-aware decision logic rather than as a new local matcher.
+
+The present evidence is strong enough to support the paper's main practical message, but it does
+not eliminate all uncertainty. In particular, the current proxy analysis supports the internal
+logic of the protocol without replacing manual geometric ground truth, and the method should still
+be presented as a practical and reproducible pipeline rather than a final solution to UAV
+RGB-thermal registration.
+
+The completed multi-seed random-selection supplement also suggests that deterministic selection is
+best treated as a stable operating policy rather than a universal performance-superiority claim.
+Under the current evidence hierarchy, the strongest supported gains come from robust aggregation and
+QA-aware scene decision.
+
+\subsection{Current Limitations}
+
+The current paper version still has several clear limits. First, the evaluation protocol is
+label-free rather than based on manual geometric ground truth. Second, the scene-level model is
+still based on homography-style alignment, which can be stressed by stronger parallax or more
+complex non-planar structure. Third, although UAV-TAlign-1K is sufficient for the present study, it
+is a focused public subset rather than a large fully annotated benchmark.

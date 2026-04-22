@@ -1,0 +1,66 @@
+% !TEX root = ../paper.tex
+
+\section{Related Work}
+
+\subsection{Classical Image Registration}
+
+Classical image registration pipelines typically rely on hand-crafted local features followed by
+robust geometric fitting. Representative methods built on SIFT, SURF, ORB, KAZE, or AKAZE remain
+attractive because they are simple, interpretable, and do not require task-specific training.
+However, their performance can degrade substantially in cross-modal settings, especially when the
+appearance gap between visible and thermal imagery reduces descriptor repeatability or when thermal
+frames contain weak texture and large homogeneous regions.
+
+These methods remain important baselines in our study because they represent the classical
+registration view of the problem: if sufficiently stable local features can be extracted, a single
+pairwise homography may already solve the task. Our results suggest that this assumption is too
+weak for real UAV RGB-thermal scenes, where scene-level reliability often remains difficult even
+when some individual pairs are usable.
+
+\subsection{Deep Pairwise Matching for Multimodal Registration}
+
+Recent dense and semi-dense matching methods have significantly improved pairwise geometric
+correspondence estimation. Transformer- and correlation-based models such as LoFTR, RoMa, XoFTR,
+and MINIMA-family methods show that cross-modal pairwise matching can now be performed much more
+robustly than with purely hand-crafted features. In particular, these methods are better at
+recovering useful correspondences in weak-texture regions, repetitive structures, or substantial
+appearance shifts.
+
+Our work builds directly on this progress instead of trying to replace it. The empirical picture in
+UAV-TAlign-1K is that strong off-the-shelf multimodal matchers already provide very high pairwise
+availability. This changes the central question. The bottleneck is no longer only whether a matcher
+can produce correspondences for a given RGB-thermal pair, but whether those frame-level estimates
+can be converted into a stable and reliable scene-level alignment under realistic UAV operating
+conditions.
+
+\subsection{Visible-Thermal Registration and Evaluation}
+
+Visible-thermal registration has been studied under a range of assumptions, from same-view or
+near-same-view alignment to broader multimodal correspondence learning. Many existing settings
+either operate under relatively controlled viewpoint changes or evaluate pairwise registration in a
+way that does not require a scene-level acceptance decision. By contrast, practical UAV
+RGB-thermal data frequently combine cross-FOV capture, cross-resolution sensing, thermal rendering
+variation, and low-light conditions. These factors make scene-level reliability a more central
+concern than in many standard visible-thermal evaluation setups.
+
+A further complication is that point-level manual geometric ground truth is expensive and sometimes
+ill-posed in weak-texture thermal frames. For the current PRCV scope, we therefore avoid presenting
+our dataset package as a fully supervised benchmark. Instead, we package a public subset,
+UAV-TAlign-1K, together with a practical label-free evaluation protocol that measures
+scene-consistency and relative alignment quality without requiring manual landmark annotation as a
+prerequisite.
+
+\subsection{UAV Multimodal Datasets and the Remaining Gap}
+
+UAV multimodal datasets have supported progress in detection, tracking, segmentation, and broader
+cross-modal perception. However, registration is not always the primary task in those benchmarks,
+and the protocol assumptions needed for scene-level RGB-thermal alignment are often different from
+those needed for downstream semantic tasks. In particular, a practical registration pipeline must
+decide not only how to align frames, but also when the scene-level evidence is strong enough to
+trust the resulting transform.
+
+This is the gap our paper targets. Rather than introducing a new matcher architecture, we focus on
+a practical scene-level registration setting for real UAV RGB-thermal imagery. Our contribution
+lies in the combination of a reliability-oriented pipeline, a public subset packaging, and a
+label-free protocol that makes the problem studyable without first building dense manual geometric
+annotations.

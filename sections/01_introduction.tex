@@ -1,0 +1,46 @@
+% !TEX root = ../paper.tex
+
+\section{Introduction}
+
+RGB-thermal alignment is a practical requirement in UAV inspection, monitoring, and low-light
+perception systems, where visible and thermal imagery provide complementary scene cues. In real
+deployments, however, reliable registration is difficult because UAV RGB-thermal data often combine
+viewpoint change, cross-resolution sensors, weak thermal texture, grayscale or pseudocolor thermal
+rendering, and day/night illumination variation. These factors make scene-level alignment
+substantially harder than standard same-view or near-same-view multimodal matching setups.
+
+Recent multimodal matchers have significantly improved pairwise cross-modal correspondence
+estimation, and strong off-the-shelf models can already produce usable registrations for many
+individual RGB-thermal pairs. Yet our experiments show that high pairwise usability does not
+automatically translate into reliable scene-level alignment under realistic UAV conditions. The
+remaining difficulty is no longer simply whether a matcher can produce correspondences, but whether
+a system can aggregate evidence across a scene and retain only transforms that remain stable under
+quality control.
+
+This observation motivates a shift in problem framing. Rather than treating UAV RGB-thermal
+registration primarily as a pairwise matching availability problem, we study it as a scene-level
+reliability problem. Under this view, the central question becomes how to convert strong but
+imperfect pairwise registrations into scene-level transforms that remain geometrically stable,
+internally consistent, and usable after QA-aware acceptance.
+
+To address this problem, we present UAV-TAlign, a practical scene-level UAV RGB-thermal alignment
+pipeline built on top of strong off-the-shelf multimodal matching. UAV-TAlign uses deterministic
+candidate selection as a reproducible operating policy, robust homography aggregation to suppress
+unstable frame-level estimates, and QA-aware scene acceptance to reject transforms that are not
+sufficiently reliable at the scene level. We further package UAV-TAlign-1K, a public subset and
+practical label-free evaluation setup for studying real UAV RGB-thermal alignment without requiring
+manual landmark annotation as a prerequisite.
+
+Our contributions are threefold:
+\begin{itemize}
+\item We present UAV-TAlign, a practical scene-level UAV RGB-thermal alignment pipeline that builds
+reliable alignment on top of strong off-the-shelf multimodal pairwise matching through robust
+aggregation and QA-aware scene acceptance.
+\item We package UAV-TAlign-1K as a public evaluation subset together with a practical label-free
+evaluation protocol for real UAV RGB-thermal alignment, without requiring manual landmark
+annotations as a prerequisite.
+\item Extensive off-the-shelf baseline comparisons, proxy-consistency analysis, and cumulative
+ablations show that, once pairwise match availability is largely in place, the main challenge
+shifts to scene-level reliability, and the most supported gains come from robust aggregation and
+reliability-aware decision.
+\end{itemize}
