@@ -9,7 +9,10 @@ subset for real UAV RGB-thermal registration. The current subset contains 15 sce
 RGB-thermal pairs, and 1000 images in total. Each sample is organized as an RGB image paired with
 a thermal image captured from the same scene context, while the dataset as a whole spans a range of
 practical UAV conditions that make registration substantially harder than standard near-same-view
-multimodal matching.
+multimodal matching. In scope and modality, it is closer to recent RGB-thermal benchmarks such as
+KAIST, FLIR, LLVIP, M3FD, DroneVehicle, VTUAV, LasHeR, and Anti-UAV than to classical
+same-sensor image matching setups
+\cite{hwang2015kaist,flir2018thermal,jia2021llvip,liu2022tardal,sun2022dronevehicle,zhang2022vtuav,li2022lasher,jiang2023antiuav}.
 
 At the scene level, the subset preserves several factors that matter for registration reliability:
 day, night, and low-light capture; grayscale and pseudocolor thermal rendering; and both wide-view
@@ -55,4 +58,6 @@ homography-dispersion and robust-rejection diagnostics.
 
 These proxies are not a substitute for absolute ground-truth accuracy. Instead, they provide a
 practical scene-consistency signal for comparing methods and for deciding whether a scene-level
-transform is reliable enough to retain under the current PRCV scope.
+transform is reliable enough to retain under the current PRCV scope, in the spirit of practical
+matching-oriented evaluation and benchmarking discussed in prior image-matching literature
+\cite{ma2021survey,liao2024survey}.

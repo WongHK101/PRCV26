@@ -3,19 +3,23 @@
 \section{Introduction}
 
 RGB-thermal alignment is a practical requirement in UAV inspection, monitoring, and low-light
-perception systems, where visible and thermal imagery provide complementary scene cues. In real
-deployments, however, reliable registration is difficult because UAV RGB-thermal data often combine
-viewpoint change, cross-resolution sensors, weak thermal texture, grayscale or pseudocolor thermal
-rendering, and day/night illumination variation. These factors make scene-level alignment
+perception systems, where visible and thermal imagery provide complementary scene cues across
+multispectral pedestrian analysis, thermal object detection, visible-thermal tracking, and UAV
+multimodal perception
+\cite{hwang2015kaist,flir2018thermal,jia2021llvip,liu2022tardal,sun2022dronevehicle,zhang2022vtuav,li2022lasher,jiang2023antiuav}.
+In real deployments, however, reliable registration is difficult because UAV RGB-thermal data often
+combine viewpoint change, cross-resolution sensors, weak thermal texture, grayscale or pseudocolor
+thermal rendering, and day/night illumination variation. These factors make scene-level alignment
 substantially harder than standard same-view or near-same-view multimodal matching setups.
 
 Recent multimodal matchers have significantly improved pairwise cross-modal correspondence
 estimation, and strong off-the-shelf models can already produce usable registrations for many
-individual RGB-thermal pairs. Yet our experiments show that high pairwise usability does not
-automatically translate into reliable scene-level alignment under realistic UAV conditions. The
-remaining difficulty is no longer simply whether a matcher can produce correspondences, but whether
-a system can aggregate evidence across a scene and retain only transforms that remain stable under
-quality control.
+individual RGB-thermal pairs
+\cite{sarlin2020superglue,sun2021loftr,chen2022aspanformer,lindenberger2023lightglue,edstedt2023dkm,edstedt2024roma,tuzcuoglu2024xoftr,ren2025minima}.
+Yet our experiments show that high pairwise usability does not automatically translate into
+reliable scene-level alignment under realistic UAV conditions. The remaining difficulty is no
+longer simply whether a matcher can produce correspondences, but whether a system can aggregate
+evidence across a scene and retain only transforms that remain stable under quality control.
 
 This observation motivates a shift in problem framing. Rather than treating UAV RGB-thermal
 registration primarily as a pairwise matching availability problem, we study it as a scene-level

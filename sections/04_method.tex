@@ -20,7 +20,8 @@ internally consistent, and acceptable under a reliability-aware QA criterion.
 
 UAV-TAlign builds on a strong off-the-shelf multimodal matcher rather than introducing a new
 matching backbone. In the current PRCV pipeline, the default backend is the MINIMA family with the
-RoMa branch, while the rest of the pipeline remains agnostic to the exact pairwise matcher.
+RoMa branch, while the rest of the pipeline remains agnostic to the exact pairwise matcher
+\cite{edstedt2024roma,ren2025minima}.
 
 At the scene level, the system does not assume that all frames should be treated equally from the
 start. It first constructs a candidate-count schedule that expands progressively with scene size.
@@ -41,7 +42,9 @@ For each selected frame pair, the matcher produces cross-modal correspondences t
 into a frame-level homography estimate. The current implementation evaluates each frame using
 standard geometric statistics, including the number of matches, the number of inliers, inlier
 ratio, reprojection error, and spatial coverage. A frame enters the global candidate pool only when
-it passes a minimum-quality gate on these statistics.
+it passes a minimum-quality gate on these statistics. The overall geometric treatment remains rooted
+in standard homography estimation and robust fitting practice
+\cite{hartley2004multiple,fischler1981ransac,barath2019magsac,barath2020magsacpp}.
 
 Beyond a binary accept/reject decision, the pipeline assigns each accepted frame a quality score so
 that better-supported homographies receive more influence during scene aggregation. The score is a
