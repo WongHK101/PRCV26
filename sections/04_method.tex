@@ -16,6 +16,15 @@ many scenes already contain some usable pairwise correspondences, but the centra
 convert those imperfect frame-level estimates into a transform that is geometrically stable,
 internally consistent, and acceptable under a reliability-aware QA criterion.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_method_pipeline.pdf}
+\caption{Overview of UAV-TAlign. The pipeline builds on pairwise matching, but makes the final
+decision at the scene level through candidate scheduling, robust homography aggregation, and
+QA-aware acceptance.}
+\label{fig:method_pipeline}
+\end{figure}
+
 \subsection{Pairwise Backbone and Candidate Scheduling}
 
 UAV-TAlign builds on a strong off-the-shelf multimodal matcher rather than introducing a new

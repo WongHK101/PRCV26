@@ -24,6 +24,7 @@
 *-eps-converted-to.pdf
 
 # Generated PDFs from local builds
+/paper.pdf
 build/
 **/build/
 

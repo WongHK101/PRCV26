@@ -88,6 +88,15 @@ outlier signals remain high, whereas scene 04 passes with 80\% accepted frames w
 warnings are absent. These observations support the claim that the protocol is capturing
 scene-level reliability rather than merely counting matched frames.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_proxy_reliability.pdf}
+\caption{Scene-level proxy evidence. Passing scenes cluster near low severe-outlier ratios, while
+failing scenes are associated with stronger baseline-relative QA outlier signals. Marker size
+indicates robust rejection ratio.}
+\label{fig:proxy_reliability}
+\end{figure}
+
 \subsection{Cumulative Ablation}
 
 The cumulative ablations show that the clearest empirical gains come from robust aggregation and
@@ -116,3 +125,12 @@ A4-subset & 5/8 & 62.5 & 80.387 & 0.1469 & 0.1485 & 4.167 \\
 The completed random-selection supplement further shows a 4/8 to 7/8 spread across seeds on the
 same fixed subset, so deterministic-even selection is best written as a reproducible default
 operating policy rather than as the single largest performance driver.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_ablation_sensitivity.pdf}
+\caption{Cumulative ablation and random-selection supplement. Robust aggregation improves proxy
+quality and reduces severe outliers, while the random-selection variant shows non-trivial seed
+sensitivity on the same fixed 8-scene subset.}
+\label{fig:ablation_sensitivity}
+\end{figure}
