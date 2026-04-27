@@ -43,7 +43,7 @@ acceptance.
 We present UAV-TAlign, a scene-level UAV RGB-thermal alignment framework designed around this
 reliability layer. UAV-TAlign operates as a reliability layer on top of modern pairwise matchers. It
 uses reliability-guided evidence selection to obtain representative frame support, robust
-homography consensus to consolidate frame-level estimates, and QA-aware verification to retain only
+scene consensus to consolidate frame-level estimates, and QA-aware verification to retain only
 scene-level transforms that satisfy strict reliability criteria. In this sense, UAV-TAlign
 elevates strong pairwise multimodal matching into a deployable scene-level alignment decision.
 
@@ -58,10 +58,10 @@ Our contributions are threefold:
 \begin{itemize}
 \item We introduce UAV-TAlign, a scene-level UAV RGB-thermal alignment framework that turns strong
 pairwise multimodal matching into reliable scene-level decisions through
-reliability-guided evidence selection, robust homography consensus, and QA-aware verification.
+reliability-guided evidence selection, robust scene consensus, and QA-aware verification.
 \item We package UAV-TAlign-1K, a public UAV RGB-thermal evaluation subset with a scalable
 label-free protocol for studying real cross-FOV aerial alignment.
 \item Through strong off-the-shelf baselines, reliability diagnostics, and cumulative module
-ablations, we show that the dominant empirical gains arise from scene-level consensus and
-verification rather than pairwise matcher availability alone.
+ablations, we show that the dominant empirical gains arise from robust scene consensus and
+QA-aware verification rather than pairwise matcher availability alone.
 \end{itemize}

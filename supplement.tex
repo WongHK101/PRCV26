@@ -69,8 +69,8 @@ ID & Light & Thermal & View & Scene family & Pairs & Canonical & Acc. \% & Edge 
 \section{Extended Baseline Results}
 
 Table~\ref{tab:supp_pairwise_full} reports the complete pairwise baseline summary used to support
-the main-paper comparison. These metrics describe per-pair usability and should be read separately
-from the scene-level canonical criterion.
+the main-paper comparison. These metrics describe per-pair usability and complement the
+scene-level canonical criterion.
 
 \begin{table}[t]
 \centering
@@ -112,7 +112,7 @@ view & wide & 2 & 1/2 & 50.0 & 90.1 & 0.159 & 0.168 & 20.3 & 98.9 \\
 view & zoom & 2 & 1/2 & 50.0 & 89.0 & 0.060 & 0.081 & 23.6 & 98.0 \\
 \bottomrule
 \end{tabular}}
-\caption{Condition-level scene summary for the UAV-TAlign full pipeline.}
+\caption{Condition-level scene summary for the UAV-TAlign full framework.}
 \label{tab:supp_condition_full}
 \end{table}
 
@@ -175,7 +175,7 @@ Scene & Canonical & Acc. \% & Reject \% & Edge & Grad. & QA outlier signal \\
 04 & Retained & 80.0 & 16.7 & 0.077 & 0.109 & No \\
 \bottomrule
 \end{tabular}}
-\caption{Paired-control scenes used to inspect whether the reliability criterion captures scene-level behavior beyond pairwise match availability.}
+\caption{Paired-control scenes illustrating how the reliability criterion captures scene-level behavior beyond pairwise match availability.}
 \label{tab:supp_paired_controls}
 \end{table}
 
@@ -200,11 +200,11 @@ Evidence selection only & \cmark & \xmark & \xmark & 8/8 & 77.4 & 0.124 & 0.126 
 + Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & 77.4 & 0.145 & 0.148 & 4.2 \\
 + QA-aware verification & \cmark & \cmark & \cmark & 5/8 & 77.2 & 0.147 & 0.149 & 4.2 \\
 Random evidence sensitivity & random & \cmark & \cmark & 6/8 & \best{80.9} & \best{0.158} & \best{0.169} & \best{3.1} \\
-Full setting (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \second{80.4} & \second{0.147} & \second{0.149} & 4.2 \\
-Full setting (15 scenes) & \cmark & \cmark & \cmark & 7/15 & 64.5 & 0.132 & 0.120 & 6.7 \\
+UAV-TAlign full (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \second{80.4} & \second{0.147} & \second{0.149} & 4.2 \\
+UAV-TAlign full (15 scenes) & \cmark & \cmark & \cmark & 7/15 & 64.5 & 0.132 & 0.120 & 6.7 \\
 \bottomrule
 \end{tabular}}
-\caption{Cumulative ablation summary and the formal-run slice on the same 8-scene subset.}
+\caption{Cumulative ablation summary and the UAV-TAlign full slice on the same 8-scene subset.}
 \label{tab:supp_ablation_full}
 \end{table}
 
@@ -217,7 +217,7 @@ Full setting (15 scenes) & \cmark & \cmark & \cmark & 7/15 & 64.5 & 0.132 & 0.12
 \toprule
 Seed & Retained $\uparrow$ & Scenes & Retention \% $\uparrow$ & Note \\
 \midrule
-seed0 & 6 & 8 & 75.0 & Original random-selection run. \\
+seed0 & 6 & 8 & 75.0 & Random-selection seed0. \\
 seed1 & 4 & 8 & 50.0 & Random-selection supplement. \\
 seed2 & 7 & 8 & 87.5 & Random-selection supplement. \\
 seed3 & 5 & 8 & 62.5 & Random-selection supplement. \\
@@ -256,8 +256,8 @@ Scene & Deterministic & Seed0 & Seed1 & Seed2 & Seed3 & Random retained count \\
 
 Figure~\ref{fig:supp_paired_controls} shows raw paired controls from the substation scene family.
 Figure~\ref{fig:supp_representative_examples} shows additional cross-condition examples used to
-inspect the range of scene appearance. These figures intentionally show raw RGB/T inputs only; no
-post-hoc rectification visualizations are introduced in the supplement.
+document the range of scene appearance. These figures focus on verified raw RGB/T inputs from the
+evaluation subset.
 
 \begin{figure}[t]
 \centering

@@ -116,20 +116,20 @@ Variant & Evidence & Consensus & Verification & Retained/N $\uparrow$ & Acc. $\u
 Evidence selection only & \cmark & \xmark & \xmark & 8/8 & \second{77.4} & 0.124 & 0.126 & 10.4 \\
 + Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & \second{77.4} & \third{0.145} & \third{0.148} & \best{4.2} \\
 + QA-aware verification & \cmark & \cmark & \cmark & 5/8 & 77.2 & \second{0.147} & \best{0.149} & \best{4.2} \\
-Full setting (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \best{80.4} & \best{0.147} & \second{0.149} & \best{4.2} \\
+UAV-TAlign full (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \best{80.4} & \best{0.147} & \second{0.149} & \best{4.2} \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 The completed random-selection supplement further shows a 4/8 to 7/8 spread across seeds on the
 same fixed subset. Deterministic-even selection therefore serves as a reproducible default
-operating policy, while robust consensus and QA-aware verification remain the primary empirical
-drivers.
+operating policy, while robust scene consensus and QA-aware verification remain the primary
+empirical drivers.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_ablation_sensitivity.pdf}
-\caption{Cumulative ablation and random-selection supplement. Robust aggregation improves proxy
+\caption{Cumulative ablation and random-selection supplement. Robust scene consensus improves proxy
 quality and reduces severe outliers, while the random-selection variant shows non-trivial seed
 sensitivity on the same fixed 8-scene subset.}
 \label{fig:ablation_sensitivity}

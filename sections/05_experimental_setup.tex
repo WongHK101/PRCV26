@@ -11,20 +11,20 @@ comparison focused on practical deployability rather than dataset-specific adapt
 
 The classical baselines are SIFT + RANSAC and AKAZE + RANSAC. The deep pairwise baselines are
 Kornia LoFTR (pretrained="outdoor"), RoMa outdoor full, XoFTR-640, and raw MINIMA. Raw MINIMA uses
-the MINIMA RoMa branch in its direct pairwise form, without the reliability-guided evidence
-selection, robust scene consensus, or QA-aware verification introduced by UAV-TAlign
+the MINIMA RoMa branch as a direct pairwise baseline; reliability-guided evidence selection, robust
+scene consensus, and QA-aware verification are activated in the UAV-TAlign full framework
 \cite{lowe2004sift,alcantarilla2013akaze,sun2021loftr,edstedt2024roma,tuzcuoglu2024xoftr,ren2025minima}.
 
 \subsection{Shared Geometric Fitting}
 
 For the pairwise methods, the common downstream step is homography fitting from the predicted
 correspondences. After each matcher returns point pairs and optional confidence values, the
-evaluation script estimates a homography with a shared robust backend and then records a unified
-outcome category. This unified post-processing is important because it makes the pairwise baseline
+shared evaluator estimates a homography with a robust backend and then records a unified outcome
+category. This unified post-processing is important because it makes the pairwise baseline
 table comparable at the level of usable registration outcomes rather than raw matcher outputs
 alone.
 
-The current homography fitting backend uses the same configuration across pairwise baselines:
+The homography fitting backend uses the same configuration across pairwise baselines:
 \begin{itemize}
 \item robust fitting method: USAC-MAGSAC;
 \item reprojection threshold: 3.0;
@@ -33,22 +33,22 @@ The current homography fitting backend uses the same configuration across pairwi
 \item spatial coverage grid: $4 \times 4$.
 \end{itemize}
 
-\subsection{Frozen Baseline Choices}
+\subsection{Main-Table Baseline Choices}
 
-The frozen main-table baseline choices are as follows. Raw MINIMA uses the MINIMA RoMa backend
+The main-table baseline choices are as follows. Raw MINIMA uses the MINIMA RoMa backend
 with the \texttt{minima\_roma} checkpoint family and the large/full RoMa branch. RoMa uses the
 public outdoor full model. XoFTR uses the 640-resolution visible-thermal checkpoint family as the
 default main-table setting. Kornia LoFTR (pretrained="outdoor") uses the public pretrained outdoor
 model from Kornia.
 
-\subsection{Runtime Details}
+\subsection{Evaluation Details}
 
-The formal LoFTR result is obtained under a resize-aware inference setting. In the full-run
+The LoFTR baseline is evaluated under a resize-aware inference setting. In the full-run
 configuration, the longest image dimension used for matching is limited to 1600, and automatic
 mixed precision is disabled. This deployment setting preserves the public pretrained model while
 supporting consistent full-subset evaluation.
 
 All experiments were run in a Linux Conda environment with Python 3.10,
-PyTorch 2.0.1, torchvision 0.15.2, and CUDA 11.8. The repository-level experiment runners also
-enforce output-root isolation so that raw dataset directories and source trees are treated as
-read-only inputs during evaluation.
+PyTorch 2.0.1, torchvision 0.15.2, and CUDA 11.8. All evaluation outputs are written to isolated
+result roots, with raw dataset directories and source trees treated as read-only inputs during
+evaluation.
