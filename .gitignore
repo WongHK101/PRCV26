@@ -25,8 +25,12 @@
 
 # Generated PDFs from local builds
 /paper.pdf
+/supplement.pdf
 build/
 **/build/
+
+# Generated preview copies for supplementary figures
+/supplement_figures/*.png
 
 # OS / editor noise
 .DS_Store
