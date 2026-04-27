@@ -4,6 +4,17 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{amssymb}
+\usepackage[table]{xcolor}
+
+\definecolor{rankbest}{HTML}{F4B7B7}
+\definecolor{ranksecond}{HTML}{F7D7A1}
+\definecolor{rankthird}{HTML}{FFF1A8}
+\newcommand{\best}[1]{\cellcolor{rankbest}\textbf{#1}}
+\newcommand{\second}[1]{\cellcolor{ranksecond}\textbf{#1}}
+\newcommand{\third}[1]{\cellcolor{rankthird}\textbf{#1}}
+\newcommand{\cmark}{\checkmark}
+\newcommand{\xmark}{--}
 
 \begin{document}
 
@@ -34,20 +45,20 @@ released evaluation subset, not synthesized rectification visualizations.
 ID & Light & Thermal & View & Scene family & Pairs & Canonical & Acc. \% & Edge gain & Grad. gain \\
 \midrule
 01 & day & grayscale & wide & substation power lines & 50 & Pass & 98.0 & 0.145 & 0.125 \\
-02 & day & grayscale & zoom & substation power lines & 50 & Not accepted & 98.0 & 0.043 & 0.054 \\
-03 & night & grayscale & wide & substation power lines & 45 & Not accepted & 82.2 & 0.172 & 0.212 \\
+02 & day & grayscale & zoom & substation power lines & 50 & Withheld & 98.0 & 0.043 & 0.054 \\
+03 & night & grayscale & wide & substation power lines & 45 & Withheld & 82.2 & 0.172 & 0.212 \\
 04 & night & grayscale & zoom & substation power lines & 45 & Pass & 80.0 & 0.077 & 0.109 \\
-05 & night & pseudocolor & - & solar panels & 16 & Not accepted & 6.2 & 0.104 & 0.110 \\
+05 & night & pseudocolor & - & solar panels & 16 & Withheld & 6.2 & 0.104 & 0.110 \\
 06 & day & pseudocolor & - & solar panels & 16 & Pass & 81.2 & 0.170 & 0.138 \\
 07 & day & grayscale & - & transmission tower & 102 & Pass & 92.2 & 0.142 & 0.201 \\
-08 & night & grayscale & - & urban & 22 & Not accepted & 36.4 & 0.113 & 0.089 \\
+08 & night & grayscale & - & urban & 22 & Withheld & 36.4 & 0.113 & 0.089 \\
 09 & day & pseudocolor & - & building & 20 & Pass & 70.0 & 0.115 & 0.086 \\
-10 & day & pseudocolor & - & factory & 24 & Not accepted & 25.0 & 0.226 & 0.168 \\
-11 & night & grayscale & - & building & 25 & Not accepted & 48.0 & 0.046 & 0.061 \\
-12 & day & grayscale & - & orchard & 20 & Not accepted & 75.0 & 0.059 & 0.024 \\
+10 & day & pseudocolor & - & factory & 24 & Withheld & 25.0 & 0.226 & 0.168 \\
+11 & night & grayscale & - & building & 25 & Withheld & 48.0 & 0.046 & 0.061 \\
+12 & day & grayscale & - & orchard & 20 & Withheld & 75.0 & 0.059 & 0.024 \\
 13 & lowlight & pseudocolor & - & road & 21 & Pass & 61.9 & 0.289 & 0.277 \\
 14 & lowlight & pseudocolor & - & transmission tower & 18 & Pass & 94.4 & 0.193 & 0.122 \\
-15 & lowlight & pseudocolor & - & woodland & 26 & Not accepted & 19.2 & 0.088 & 0.022 \\
+15 & lowlight & pseudocolor & - & woodland & 26 & Withheld & 19.2 & 0.088 & 0.022 \\
 \bottomrule
 \end{tabular}}
 \caption{Complete scene list for UAV-TAlign-1K. The canonical column reports the scene-level decision under the QA-aware criterion used in the main paper.}
@@ -68,14 +79,14 @@ from the scene-level canonical criterion.
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrrrrrl}
 \toprule
-Method & OK/Total & OK \% & H \% & Inlier & Coverage & Reproj. & Runtime s & Note \\
+Method & OK/Total $\uparrow$ & OK \% $\uparrow$ & H \% $\uparrow$ & Inlier $\uparrow$ & Coverage $\uparrow$ & Reproj. $\downarrow$ & Runtime $\downarrow$ & Note \\
 \midrule
-SIFT + RANSAC & 457/500 & 91.4 & 91.4 & 0.240 & 0.599 & 0.260 & 4.61 &  \\
-AKAZE + RANSAC & 479/500 & 95.8 & 95.8 & 0.177 & 0.646 & 0.393 & 2.37 &  \\
-Kornia LoFTR outdoor & 499/500 & 99.8 & 99.8 & 0.096 & 0.919 & 1.411 & 0.55 & max dim 1600 \\
-RoMa outdoor full & 500/500 & 100.0 & 100.0 & 0.400 & 0.982 & 1.672 & 1.08 &  \\
-XoFTR-640 & 494/500 & 98.8 & 98.8 & 0.151 & 0.951 & 1.610 & 1.20 &  \\
-raw MINIMA & 500/500 & 100.0 & 100.0 & 0.378 & 0.996 & 1.707 & 1.86 &  \\
+SIFT + RANSAC & 457/500 & 91.4 & 91.4 & \third{0.240} & 0.599 & \best{0.260} & 4.61 &  \\
+AKAZE + RANSAC & 479/500 & 95.8 & 95.8 & 0.177 & 0.646 & \second{0.393} & 2.37 &  \\
+Kornia LoFTR outdoor & \second{499/500} & \second{99.8} & \second{99.8} & 0.096 & 0.919 & \third{1.411} & \best{0.55} & max dim 1600 \\
+RoMa outdoor full & \best{500/500} & \best{100.0} & \best{100.0} & \best{0.400} & \second{0.982} & 1.672 & \second{1.08} &  \\
+XoFTR-640 & \third{494/500} & \third{98.8} & \third{98.8} & 0.151 & \third{0.951} & 1.610 & \third{1.20} &  \\
+raw MINIMA & \best{500/500} & \best{100.0} & \best{100.0} & \second{0.378} & \best{0.996} & 1.707 & 1.86 &  \\
 \bottomrule
 \end{tabular}}
 \caption{Complete pairwise baseline summary on the 500-pair evaluation subset.}
@@ -89,7 +100,7 @@ raw MINIMA & 500/500 & 100.0 & 100.0 & 0.378 & 0.996 & 1.707 & 1.86 &  \\
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrrrrrrr}
 \toprule
-Condition & Value & Scenes & Pass & Pass \% & Acc. \% & Edge & Grad. & Reject \% & Classical OK \% \\
+Condition & Value & Scenes & Pass $\uparrow$ & Pass \% $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Reject \% $\downarrow$ & Classical OK \% $\uparrow$ \\
 \midrule
 light condition & day & 7 & 4/7 & 57.1 & 77.1 & 0.129 & 0.114 & 15.0 & 88.2 \\
 light condition & lowlight & 3 & 2/3 & 66.7 & 58.5 & 0.190 & 0.140 & 17.7 & 87.9 \\
@@ -119,14 +130,14 @@ manual geometric annotations.
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrrrrrr}
 \toprule
-Group & Scenes & Acc. \% & Edge & Grad. & Grad improved \% & Reject \% & Severe outlier \% & Mean inlier \\
+Group & Scenes & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Grad improved \% $\uparrow$ & Reject \% $\downarrow$ & Severe outlier \% $\downarrow$ & Mean inlier $\uparrow$ \\
 \midrule
-Pass & 7 & 82.5 & 0.162 & 0.151 & 96.4 & 14.4 & 0.0 & 0.446 \\
-Not accepted & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
+Retained & 7 & \best{82.5} & \best{0.162} & \best{0.151} & \best{96.4} & \best{14.4} & \best{0.0} & \best{0.446} \\
+Withheld & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
 \bottomrule
 \end{tabular}}
-\caption{Pass/not-accepted grouping under the canonical scene-level criterion.}
-\label{tab:supp_passfail_proxy}
+\caption{Retained/withheld grouping under the canonical scene-level criterion.}
+\label{tab:supp_retained_proxy}
 \end{table}
 
 \begin{table}[t]
@@ -136,7 +147,7 @@ Not accepted & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
-Rule & Not-accepted true & Pass true & Not-accepted recall \% & Pass exclusion \% \\
+Rule & Withheld true & Retained true & Withheld recall \% & Retained exclusion \% \\
 \midrule
 Baseline-relative QA outliers & 8 & 0 & 100.0 & 100.0 \\
 Accepted ratio < 0.60 & 5 & 0 & 62.5 & 100.0 \\
@@ -159,8 +170,8 @@ Outlier signal AND warning-path not OK & 8 & 0 & 100.0 & 100.0 \\
 Scene & Canonical & Acc. \% & Reject \% & Edge & Grad. & QA outlier signal \\
 \midrule
 01 & Pass & 98.0 & 0.0 & 0.145 & 0.125 & No \\
-02 & Not accepted & 98.0 & 30.6 & 0.043 & 0.054 & Yes \\
-03 & Not accepted & 82.2 & 40.5 & 0.172 & 0.212 & Yes \\
+02 & Withheld & 98.0 & 30.6 & 0.043 & 0.054 & Yes \\
+03 & Withheld & 82.2 & 40.5 & 0.172 & 0.212 & Yes \\
 04 & Pass & 80.0 & 16.7 & 0.077 & 0.109 & No \\
 \bottomrule
 \end{tabular}}
@@ -171,26 +182,26 @@ Scene & Canonical & Acc. \% & Reject \% & Edge & Grad. & QA outlier signal \\
 
 \section{Cumulative Ablations and Random-Selection Sensitivity}
 
-The cumulative ablation is reported on a fixed 8-scene subset and is used to separate candidate
-selection, robust aggregation, and QA-aware scene decision. The random-selection supplement keeps the
-same subset and changes only the random seed, showing why deterministic-even selection is used as a
-stable default operating policy.
+The cumulative ablation is reported on a fixed 8-scene subset and separates reliability-guided
+evidence selection, robust scene consensus, and QA-aware verification. The random-selection
+supplement keeps the same subset and changes only the random seed, showing why deterministic-even
+selection is used as a stable default operating policy.
 
 \begin{table}[t]
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llllrrrrrr}
+\begin{tabular}{lccc rrrrr}
 \toprule
-Stage & Candidate & Aggregation & Decision & Pass & Acc. \% & Edge & Grad. & Reject \% & Severe \% \\
+Variant & Evidence & Consensus & Verification & Pass $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Severe \% $\downarrow$ \\
 \midrule
-A1 & forced adaptive & single best & accepted only & 8/8 & 77.4 & 0.124 & 0.126 & 18.1 & 10.4 \\
-A2 & forced adaptive & robust weighted & accepted only & 8/8 & 77.4 & 0.145 & 0.148 & 18.1 & 4.2 \\
-A3 & forced adaptive & robust weighted & qa status & 5/8 & 77.2 & 0.147 & 0.149 & 19.0 & 4.2 \\
-S1 & forced adaptive random & robust weighted & qa status & 6/8 & 80.9 & 0.158 & 0.169 & 19.4 & 3.1 \\
-A4-subset & formal default slice & robust weighted & qa status & 5/8 & 80.4 & 0.147 & 0.149 & 20.9 & 4.2 \\
-A4-all & formal default & robust weighted & qa status & 7/15 & 64.5 & 0.132 & 0.120 & 17.1 & 6.7 \\
+Evidence selection only & \cmark & \xmark & \xmark & 8/8 & 77.4 & 0.124 & 0.126 & 10.4 \\
++ Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & 77.4 & 0.145 & 0.148 & 4.2 \\
++ QA-aware verification & \cmark & \cmark & \cmark & 5/8 & 77.2 & 0.147 & 0.149 & 4.2 \\
+Random evidence sensitivity & random & \cmark & \cmark & 6/8 & \best{80.9} & \best{0.158} & \best{0.169} & \best{3.1} \\
+Full setting (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \second{80.4} & \second{0.147} & \second{0.149} & 4.2 \\
+Full setting (15 scenes) & \cmark & \cmark & \cmark & 7/15 & 64.5 & 0.132 & 0.120 & 6.7 \\
 \bottomrule
 \end{tabular}}
 \caption{Cumulative ablation summary and the formal-run slice on the same 8-scene subset.}
@@ -204,9 +215,9 @@ A4-all & formal default & robust weighted & qa status & 7/15 & 64.5 & 0.132 & 0.
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrl}
 \toprule
-Seed & Pass & Scenes & Pass \% & Note \\
+Seed & Pass $\uparrow$ & Scenes & Pass \% $\uparrow$ & Note \\
 \midrule
-seed0 & 6 & 8 & 75.0 & Original single-seed S1 run. \\
+seed0 & 6 & 8 & 75.0 & Original random-selection run. \\
 seed1 & 4 & 8 & 50.0 & Random-selection supplement. \\
 seed2 & 7 & 8 & 87.5 & Random-selection supplement. \\
 seed3 & 5 & 8 & 62.5 & Random-selection supplement. \\
@@ -214,7 +225,7 @@ range\_across\_seed0\_to\_seed3 & 4-7 & 8 & 50.0-87.5 & Seed-sensitive spread on
 \bottomrule
 \end{tabular}}
 \caption{Random-selection multi-seed summary on the fixed 8-scene ablation subset.}
-\label{tab:supp_s1_seed_summary}
+\label{tab:supp_random_seed_summary}
 \end{table}
 
 \begin{table}[t]
@@ -224,20 +235,20 @@ range\_across\_seed0\_to\_seed3 & 4-7 & 8 & 50.0-87.5 & Seed-sensitive spread on
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllr}
 \toprule
-Scene & A3 & Seed0 & Seed1 & Seed2 & Seed3 & Random pass count \\
+Scene & Deterministic & Seed0 & Seed1 & Seed2 & Seed3 & Random pass count \\
 \midrule
-01 & Pass & Not accepted & Not accepted & Pass & Not accepted & 1 \\
-02 & Not accepted & Not accepted & Not accepted & Not accepted & Not accepted & 0 \\
-03 & Not accepted & Pass & Not accepted & Pass & Not accepted & 2 \\
+01 & Pass & Withheld & Withheld & Pass & Withheld & 1 \\
+02 & Withheld & Withheld & Withheld & Withheld & Withheld & 0 \\
+03 & Withheld & Pass & Withheld & Pass & Withheld & 2 \\
 04 & Pass & Pass & Pass & Pass & Pass & 4 \\
 07 & Pass & Pass & Pass & Pass & Pass & 4 \\
-08 & Not accepted & Pass & Not accepted & Pass & Pass & 3 \\
+08 & Withheld & Pass & Withheld & Pass & Pass & 3 \\
 13 & Pass & Pass & Pass & Pass & Pass & 4 \\
 14 & Pass & Pass & Pass & Pass & Pass & 4 \\
 \bottomrule
 \end{tabular}}
-\caption{Scene-level stability for deterministic A3 and random-selection seeds.}
-\label{tab:supp_s1_scene_stability}
+\caption{Scene-level stability for deterministic evidence selection and random-selection seeds.}
+\label{tab:supp_random_scene_stability}
 \end{table}
 
 

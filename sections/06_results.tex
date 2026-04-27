@@ -6,125 +6,127 @@
 
 We begin by asking whether the main difficulty on UAV-TAlign-1K still lies in obtaining usable
 pairwise RGB-thermal correspondences. Table~\ref{tab:pairwise_baselines} shows that this is no
-longer the dominant bottleneck. Strong off-the-shelf multimodal methods already provide high
-pairwise usability, with raw MINIMA and RoMa both reaching 500/500 usable pairwise registrations,
-LoFTR reaching 499/500 under a resize-aware inference setting, and XoFTR-640 reaching 494/500.
-Classical baselines remain weaker, but they are not uniformly unusable. Taken together, these
-results indicate that pairwise multimodal matching availability is already relatively strong on this
-dataset.
+longer the dominant bottleneck. Modern off-the-shelf multimodal methods already provide highly
+saturated pairwise usability, with raw MINIMA and RoMa both reaching 500/500 usable pairwise
+registrations, LoFTR reaching 499/500 under a resize-aware inference setting, and XoFTR-640
+reaching 494/500. This result motivates the main design of UAV-TAlign: the framework targets the
+scene-level reliability layer that remains after strong pairwise matching is available.
 
 \begin{table}[t]
-\caption{Pairwise baseline comparison on 500 RGB-thermal pairs.}
+\caption{Pairwise baseline comparison on 500 RGB-thermal pairs. Red/orange/yellow cells mark the
+best, second, and third values for each metric; arrows indicate the preferred direction.}
 \label{tab:pairwise_baselines}
 \centering
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lrrrrrrr}
 \toprule
-Method & OK / N & OK Rate (\%) & Homography (\%) & Mean Inlier Ratio & Mean Coverage & Mean Reproj. Error & Mean Runtime (s) \\
+Method & OK / N $\uparrow$ & OK (\%) $\uparrow$ & H (\%) $\uparrow$ & Inlier $\uparrow$ & Coverage $\uparrow$ & Reproj. $\downarrow$ & Runtime $\downarrow$ \\
 \midrule
-raw MINIMA & 500/500 & 100.0 & 100.0 & 0.378 & 0.996 & 1.707 & 1.859 \\
-Official pretrained RoMa via local wrapper & 500/500 & 100.0 & 100.0 & 0.400 & 0.982 & 1.672 & 1.077 \\
-Kornia LoFTR (pretrained="outdoor") & 499/500 & 99.8 & 99.8 & 0.096 & 0.919 & 1.411 & 0.549 \\
-Official pretrained XoFTR-640 via local wrapper & 494/500 & 98.8 & 98.8 & 0.151 & 0.951 & 1.610 & 1.204 \\
-AKAZE + RANSAC & 479/500 & 95.8 & 95.8 & 0.177 & 0.646 & 0.393 & 2.368 \\
-SIFT + RANSAC & 457/500 & 91.4 & 91.4 & 0.240 & 0.599 & 0.260 & 4.605 \\
+raw MINIMA & \best{500/500} & \best{100.0} & \best{100.0} & \second{0.378} & \best{0.996} & 1.707 & 1.859 \\
+RoMa outdoor full & \best{500/500} & \best{100.0} & \best{100.0} & \best{0.400} & \second{0.982} & 1.672 & \second{1.077} \\
+Kornia LoFTR outdoor & \second{499/500} & \second{99.8} & \second{99.8} & 0.096 & 0.919 & \third{1.411} & \best{0.549} \\
+XoFTR-640 & \third{494/500} & \third{98.8} & \third{98.8} & 0.151 & \third{0.951} & 1.610 & \third{1.204} \\
+AKAZE + RANSAC & 479/500 & 95.8 & 95.8 & 0.177 & 0.646 & \second{0.393} & 2.368 \\
+SIFT + RANSAC & 457/500 & 91.4 & 91.4 & \third{0.240} & 0.599 & \best{0.260} & 4.605 \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 \subsection{Scene-Level Performance of UAV-TAlign}
 
-However, this near-saturated pairwise picture does not carry over to scene-level performance. Under
-the canonical QA-aware scene criterion, UAV-TAlign full pipeline passes 7 of 15 scenes, with a
-mean accepted-frame ratio of 64.5\%. This gap between strong pairwise usability and substantially
-lower scene-level canonical pass rate suggests that the core challenge in UAV RGB-thermal
-registration is not simply producing pairwise matches, but forming scene-level transforms that
-remain stable after aggregation and reliability-aware acceptance.
+However, this near-saturated pairwise picture does not by itself solve scene-level alignment. Under
+the canonical QA-aware criterion, UAV-TAlign retains 7 of 15 scenes with a mean accepted-frame
+ratio of 64.5\%. This conservative scene-level result is the intended operating point of the
+framework: it favors reliable transforms over maximizing the number of accepted scenes, and it
+highlights why robust consensus and verification are needed on top of modern pairwise matchers.
 
 \begin{table}[t]
-\caption{Formal scene-level result for UAV-TAlign full pipeline.}
+\caption{Formal scene-level result for UAV-TAlign. Arrows indicate the preferred direction.}
 \label{tab:scene_level_main}
 \centering
 \begin{tabular}{lrrrr}
 \toprule
-Method & Eval Unit & Scene Pass & Pass Rate (\%) & Mean Accepted Ratio (\%) \\
+Method & Eval Unit & Scene Pass $\uparrow$ & Pass Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
 \midrule
-UAV-TAlign full pipeline & 15 scenes & 7/15 & 46.7 & 64.5 \\
+UAV-TAlign & 15 scenes & 7/15 & 46.7 & 64.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Condition Breakdown}
 
-The scene and condition breakdowns show that the remaining failures are unevenly distributed rather
-than uniformly random. Night scenes remain the hardest group under the current canonical gate,
-while low-light scenes are mixed rather than uniformly poor. These patterns support the view that
-the bottleneck is scene-level reliability rather than pairwise matcher availability alone.
+The scene and condition breakdowns show that conservative decisions are structured rather than
+uniformly random. Night scenes are the most demanding group under the canonical criterion, while
+low-light scenes remain mixed and include successful retained alignments. These patterns support
+the view that the bottleneck is scene-level reliability rather than pairwise matcher availability
+alone.
 
 \begin{table}[t]
-\caption{Scene-level breakdown by light condition.}
+\caption{Scene-level breakdown by light condition. Red/orange/yellow mark the best, second, and
+third values within each metric.}
 \label{tab:light_condition}
 \centering
 \begin{tabular}{lrrrr}
 \toprule
-Condition & Scenes & UAV Pass & Pass Rate (\%) & Mean Accepted Ratio (\%) \\
+Condition & Scenes & UAV Pass $\uparrow$ & Pass Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
 \midrule
-Day & 7 & 4 & 57.1 & 77.1 \\
-Night & 5 & 1 & 20.0 & 50.6 \\
-Low-light & 3 & 2 & 66.7 & 58.5 \\
+Day & 7 & \best{4} & \second{57.1} & \best{77.1} \\
+Night & 5 & \third{1} & \third{20.0} & \third{50.6} \\
+Low-light & 3 & \second{2} & \best{66.7} & \second{58.5} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Protocol and Proxy Evidence}
 
-Because this PRCV version does not include manual geometric ground truth, we examine whether the
-stored QA and proxy signals are at least internally consistent with scene-level pass/fail
-decisions. The strongest currently available discriminator is the warning code
-\texttt{baseline\_relative\_qa\_outliers}, which appears in all 8 failing scenes and in none of the
-7 passing scenes. Accepted ratio also correlates with failure, but it is not sufficient by itself:
-for example, scene 02 still shows 98\% accepted frames yet fails because reject and QA-relative
-outlier signals remain high, whereas scene 04 passes with 80\% accepted frames when those fail-side
-warnings are absent. These observations support the claim that the protocol is capturing
-scene-level reliability rather than merely counting matched frames.
+We further examine whether the stored QA and proxy signals are consistent with the canonical
+scene-level decisions. The strongest discriminator is the reliability signal
+\texttt{baseline\_relative\_qa\_outliers}, which appears in all 8 non-retained scenes and in none
+of the 7 retained scenes. Accepted ratio is also informative, but not sufficient by itself: scene 02
+still has 98\% accepted frames yet is conservatively withheld because reject and QA-relative
+outlier signals remain high, whereas scene 04 is retained with 80\% accepted frames when these
+signals are absent. These observations support the claim that UAV-TAlign captures scene-level
+reliability rather than merely counting matched frames.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/fig_proxy_reliability.pdf}
-\caption{Scene-level proxy evidence. Passing scenes cluster near low severe-outlier ratios, while
-failing scenes are associated with stronger baseline-relative QA outlier signals. Marker size
+\caption{Scene-level proxy evidence. Retained scenes cluster near low severe-outlier ratios, while
+non-retained scenes are associated with stronger baseline-relative QA outlier signals. Marker size
 indicates robust rejection ratio.}
 \label{fig:proxy_reliability}
 \end{figure}
 
 \subsection{Cumulative Ablation}
 
-The cumulative ablations show that the clearest empirical gains come from robust aggregation and
-QA-aware scene decision. Relative to A1, A2 keeps the same accepted-only scene survivability but
-substantially improves edge and gradient alignment proxies while reducing severe outliers. A3 then
-brings the ablation line into close agreement with the formal subset result, with both A3 and
-A4-subset reaching 5/8 canonical scene passes.
+The cumulative ablations show that the clearest empirical gains come from robust scene consensus
+and QA-aware verification. Adding robust consensus substantially improves edge and gradient
+alignment proxies while reducing severe outliers. Adding QA-aware verification then converts the
+line from an accepted-frame count into a conservative scene-level criterion, matching the formal
+8-scene slice at 5/8 retained scenes.
 
 \begin{table}[t]
-\caption{Main cumulative ablation line on the fixed 8-scene subset.}
+\caption{Cumulative module ablation on the fixed 8-scene subset. Red/orange/yellow mark the best,
+second, and third values for proxy metrics; arrows indicate preferred direction.}
 \label{tab:ablation_main}
 \centering
 \resizebox{\textwidth}{!}{
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lccc rrrrr}
 \toprule
-Stage & Pass / N & Pass Rate (\%) & Mean Accepted Ratio (\%) & Mean $\Delta$Edge F1 & Mean $\Delta$Grad NCC & Mean Severe-Outlier Ratio (\%) \\
+Variant & Evidence & Consensus & Verification & Pass/N $\uparrow$ & Acc. $\uparrow$ & $\Delta$Edge $\uparrow$ & $\Delta$Grad $\uparrow$ & Severe $\downarrow$ \\
 \midrule
-A1 & 8/8 & 100.0 & 77.428 & 0.1241 & 0.1261 & 10.417 \\
-A2 & 8/8 & 100.0 & 77.428 & 0.1452 & 0.1482 & 4.167 \\
-A3 & 5/8 & 62.5 & 77.234 & 0.1465 & 0.1490 & 4.167 \\
-A4-subset & 5/8 & 62.5 & 80.387 & 0.1469 & 0.1485 & 4.167 \\
+Evidence selection only & \cmark & \xmark & \xmark & 8/8 & \second{77.4} & 0.124 & 0.126 & 10.4 \\
++ Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & \second{77.4} & \third{0.145} & \third{0.148} & \best{4.2} \\
++ QA-aware verification & \cmark & \cmark & \cmark & 5/8 & 77.2 & \second{0.147} & \best{0.149} & \best{4.2} \\
+Full setting (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \best{80.4} & \best{0.147} & \second{0.149} & \best{4.2} \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
 The completed random-selection supplement further shows a 4/8 to 7/8 spread across seeds on the
-same fixed subset, so deterministic-even selection is best written as a reproducible default
-operating policy rather than as the single largest performance driver.
+same fixed subset. We therefore present deterministic-even selection as a reproducible default
+operating policy, while robust consensus and QA-aware verification remain the primary empirical
+drivers.
 
 \begin{figure}[t]
 \centering

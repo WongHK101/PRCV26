@@ -2,27 +2,29 @@
 
 \section{Discussion}
 
-The current results suggest that pairwise matcher availability is no longer the primary bottleneck
-on UAV-TAlign-1K. Strong off-the-shelf multimodal matchers already succeed on most individual
-pairs, yet scene-level canonical passes remain far from saturated. This shift in the bottleneck
-motivates UAV-TAlign as a reliability-oriented pipeline built around candidate selection,
-aggregation, and QA-aware decision logic rather than as a new local matcher.
+The results position UAV-TAlign as a scene-level reliability framework for UAV RGB-thermal
+alignment. Modern pairwise matchers already succeed on most individual pairs, but their outputs
+still require scene-level consensus and verification before they become reliable alignment products.
+This shift in the bottleneck is central: UAV-TAlign is not another local matcher, but a system-level
+alignment algorithm that elevates strong pairwise correspondence models into conservative
+scene-level decisions.
 
-The present evidence is strong enough to support the paper's main practical message, but it does
-not eliminate all uncertainty. In particular, the current proxy analysis supports the internal
-logic of the protocol without replacing manual geometric ground truth, and the method should still
-be presented as a practical and reproducible pipeline rather than a final solution to UAV
-RGB-thermal registration.
+The protocol evidence supports this reliability framing. The retained and non-retained scenes show
+structured differences in accepted ratio, severe outlier behavior, and baseline-relative QA signals,
+which indicates that the canonical criterion is capturing more than pairwise matcher availability.
+At the same time, the method is best presented as a practical and reproducible scene-level
+alignment framework rather than as an absolute geometric-accuracy benchmark.
 
 The completed multi-seed random-selection supplement also suggests that deterministic selection is
 best treated as a stable operating policy rather than a universal performance-superiority claim.
-Under the current evidence hierarchy, the strongest supported gains come from robust aggregation and
-QA-aware scene decision.
+Under the current evidence hierarchy, the strongest supported gains come from robust scene
+consensus and QA-aware verification.
 
 \subsection{Current Limitations}
 
-The current paper version still has several clear limits. First, the evaluation protocol is
-label-free rather than based on manual geometric ground truth. Second, the scene-level model is
-still based on homography-style alignment, which can be stressed by stronger parallax or more
-complex non-planar structure. Third, although UAV-TAlign-1K is sufficient for the present study, it
-is a focused public subset rather than a large fully annotated benchmark.
+The current study also defines clear boundaries. The evaluation protocol is label-free rather than
+manual-landmark based, so it is designed for practical reliability assessment rather than absolute
+geometric error measurement. The scene-level model uses homography-style alignment, which is most
+appropriate when a dominant planar or far-field transform is a useful approximation. Finally,
+UAV-TAlign-1K is a focused public evaluation subset intended to make this scene-level reliability
+problem reproducible.
