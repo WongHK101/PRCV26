@@ -3,17 +3,16 @@
 \section{Discussion}
 
 The results position UAV-TAlign as a scene-level reliability framework for UAV RGB-thermal
-alignment. Modern pairwise matchers already succeed on most individual pairs, but their outputs
-still require scene-level consensus and verification before they become reliable alignment products.
-This shift in the bottleneck is central: UAV-TAlign is a system-level alignment algorithm that
-elevates strong pairwise correspondence models into reliability-controlled scene-level decisions.
+alignment. Modern pairwise matchers already provide abundant frame-level correspondences on
+UAV-TAlign-1K, which makes scene-level decision quality the central operating question. UAV-TAlign
+addresses this layer directly by elevating strong pairwise correspondence models into
+reliability-controlled scene-level alignment products.
 
 The protocol evidence supports this reliability framing. Retained and QA-filtered scenes show
 structured differences in accepted ratio, severe outlier behavior, and baseline-relative QA
-signals, which indicates that the canonical criterion is capturing more than pairwise matcher
-availability.
-The resulting evidence supports a practical and reproducible scene-level alignment framework for
-real UAV RGB-thermal imagery.
+signals, indicating that the canonical criterion captures scene-level reliability beyond pairwise
+matcher availability. This gives the evaluation a clear diagnostic role: it identifies when
+abundant pairwise evidence becomes a trustworthy scene-level transform.
 
 The completed multi-seed random-selection supplement further strengthens the design rationale for
 deterministic evidence selection: it provides a stable operating policy under the same fixed
@@ -22,7 +21,9 @@ module-level gains.
 
 \subsection{Practical Operating Scope}
 
-The current formulation targets real UAV scenes where a dominant planar or far-field transform is a
-useful operating model. Within this scope, the combination of public subset packaging, label-free
+UAV-TAlign targets real UAV scenes where a dominant planar or far-field transform is a useful
+operating model. Within this scope, the combination of public subset packaging, label-free
 reliability diagnostics, and scene-level QA provides a compact experimental foundation for studying
-RGB-thermal alignment beyond isolated pairwise matching.
+RGB-thermal alignment beyond isolated pairwise matching. This positioning is deliberately
+complementary to matcher-centric research: as pairwise correspondence models continue to improve,
+scene-level reliability control becomes increasingly important for deployable RGB-thermal systems.
