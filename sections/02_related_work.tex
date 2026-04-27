@@ -11,13 +11,14 @@ training
 \cite{lowe2004sift,bay2008surf,rublee2011orb,leutenegger2011brisk,alcantarilla2012kaze,alcantarilla2013akaze}.
 In cross-modal settings, the appearance gap between visible and thermal imagery can reduce
 descriptor repeatability, especially when thermal frames contain low-texture or homogeneous
-regions.
+regions. These methods nevertheless provide a strong geometric reference point for understanding
+which parts of the registration problem are addressed by local feature extraction and which parts
+require higher-level scene reasoning.
 
 These methods remain important baselines in our study because they represent the classical
-registration view of the problem: if sufficiently stable local features can be extracted, a single
-pairwise homography may already solve the task. Robust model estimation remains central in these
-pipelines, from RANSAC and multiple-view geometry to more recent variants such as MAGSAC and
-MAGSAC++
+registration view of the problem: stable local features followed by robust homography fitting.
+Robust model estimation remains central in these pipelines, from RANSAC and multiple-view geometry
+to more recent variants such as MAGSAC and MAGSAC++
 \cite{fischler1981ransac,hartley2004multiple,barath2019magsac,barath2020magsacpp}. Our results
 show that real UAV RGB-thermal scenes benefit from moving beyond a single-pair formulation toward
 scene-level evidence aggregation and reliability control.
@@ -39,10 +40,11 @@ from classical pipelines to trainable matching, together with practical benchmar
 provide additional context
 \cite{ma2021survey,liao2024survey}.
 
-Our work builds directly on this progress. The empirical picture in UAV-TAlign-1K is that strong
-off-the-shelf multimodal matchers already provide very high pairwise availability. This changes the
-central question from correspondence generation alone to the conversion of frame-level estimates
-into stable and reliable scene-level alignment under realistic UAV operating conditions.
+Our work builds directly on this progress by treating modern matchers as high-capacity evidence
+generators. The empirical picture in UAV-TAlign-1K is that strong off-the-shelf multimodal matchers
+already provide very high pairwise availability. This moves the central question from
+correspondence generation alone to the conversion of frame-level estimates into stable and reliable
+scene-level alignment under realistic UAV operating conditions.
 
 \subsection{Visible-Thermal Registration and Evaluation}
 
@@ -60,7 +62,7 @@ visible-thermal evaluation setups.
 UAV-TAlign-1K extends this evaluation landscape by packaging real cross-FOV RGB-thermal scenes
 together with scalable label-free diagnostics. The protocol measures scene consistency and relative
 alignment quality, allowing the study to focus on reliability-controlled scene-level alignment
-under practical UAV acquisition conditions.
+under practical UAV acquisition conditions rather than isolated pairwise correspondence counts.
 
 \subsection{UAV Multimodal Datasets and the Remaining Gap}
 
@@ -76,5 +78,5 @@ when the scene-level evidence is strong enough to trust the resulting transform.
 
 This is the gap our paper targets. Complementary to new matcher architectures, we focus on a
 practical scene-level registration setting for real UAV RGB-thermal imagery. Our contribution lies
-in the combination of a reliability-oriented pipeline, a public subset package, and a label-free
-protocol that makes scene-level reliability directly studyable.
+in a reliability-oriented alignment framework, a public subset package, and a label-free protocol
+that make scene-level RGB-thermal reliability directly studyable.

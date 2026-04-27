@@ -4,13 +4,12 @@
 
 \subsection{Pairwise Baseline Comparison}
 
-We begin by asking whether the main difficulty on UAV-TAlign-1K still lies in obtaining usable
-pairwise RGB-thermal correspondences. Table~\ref{tab:pairwise_baselines} shows that this is no
-longer the dominant bottleneck. Modern off-the-shelf multimodal methods already provide highly
-saturated pairwise usability, with raw MINIMA and RoMa both reaching 500/500 usable pairwise
-registrations, LoFTR reaching 499/500 under a resize-aware inference setting, and XoFTR-640
-reaching 494/500. This result motivates the main design of UAV-TAlign: the framework targets the
-scene-level reliability layer that remains after strong pairwise matching is available.
+We first evaluate whether UAV-TAlign-1K is primarily limited by pairwise correspondence
+availability. Table~\ref{tab:pairwise_baselines} shows a highly saturated pairwise regime: raw
+MINIMA and RoMa both reach 500/500 usable pairwise registrations, LoFTR reaches 499/500 under a
+resize-aware inference setting, and XoFTR-640 reaches 494/500. This result sharpens the role of
+UAV-TAlign. The framework is designed for the scene-level reliability layer that remains after
+strong pairwise matching is available.
 
 \begin{table}[t]
 \caption{Pairwise baseline comparison on 500 RGB-thermal pairs. Red/orange/yellow cells mark the
@@ -37,8 +36,8 @@ SIFT + RANSAC & 457/500 & 91.4 & 91.4 & \third{0.240} & 0.599 & \best{0.260} & 4
 The near-saturated pairwise picture motivates the scene-level reliability layer. Under the
 canonical QA-aware criterion, UAV-TAlign retains 7 of 15 scenes with a mean accepted-frame ratio of
 64.5\%. This reliability-controlled operating point emphasizes high-confidence scene transforms
-and highlights why robust consensus and verification are valuable on top of modern pairwise
-matchers.
+and shows how robust consensus and verification turn abundant frame-level matches into selected
+scene-level alignment products.
 
 \begin{table}[t]
 \caption{Formal scene-level retention result for UAV-TAlign. Arrows indicate the preferred direction.}
@@ -55,11 +54,10 @@ UAV-TAlign & 15 scenes & 7/15 & 46.7 & 64.5 \\
 
 \subsection{Condition Breakdown}
 
-The scene and condition breakdowns show that QA-aware scene decisions are structured rather than
-uniformly distributed. Night scenes are the most demanding group under the canonical criterion,
-while low-light scenes include successful retained alignments. These patterns support
-the view that the bottleneck is scene-level reliability rather than pairwise matcher availability
-alone.
+The scene and condition breakdowns show that QA-aware scene decisions follow meaningful condition
+structure. Day and low-light groups retain multiple scene-level alignments, and the night group
+highlights the value of condition-aware reliability analysis. These patterns support the view that
+the central challenge is scene-level reliability rather than pairwise matcher availability alone.
 
 \begin{table}[t]
 \caption{Scene-level breakdown by light condition. Red/orange/yellow mark the best, second, and
@@ -79,14 +77,14 @@ Low-light & 3 & \second{2} & \best{66.7} & \second{58.5} \\
 
 \subsection{Protocol and Proxy Evidence}
 
-We further examine whether the stored QA and proxy signals are consistent with the canonical
-scene-level decisions. The strongest discriminator is the reliability signal
+We further examine how the stored QA and proxy signals support the canonical scene-level decisions.
+The strongest discriminator is the reliability signal
 \texttt{baseline\_relative\_qa\_outliers}, which separates all 8 QA-filtered scenes from the 7
 retained scenes. Accepted ratio is also informative as part of the joint decision: scene 02 has
 98\% accepted frames but is QA-filtered because reject and QA-relative outlier signals remain high,
 whereas scene 04 is retained with 80\% accepted frames when these signals are absent. These
-observations support the claim that UAV-TAlign captures scene-level reliability rather than merely
-counting matched frames.
+observations show that UAV-TAlign captures scene-level reliability as a joint QA decision rather
+than a simple count of matched frames.
 
 \begin{figure}[t]
 \centering
@@ -99,11 +97,11 @@ indicates robust rejection ratio.}
 
 \subsection{Cumulative Ablation}
 
-The cumulative ablations show that the clearest empirical gains come from robust scene consensus
-and QA-aware verification. Adding robust consensus substantially improves edge and gradient
-alignment proxies while reducing severe outliers. Adding QA-aware verification then converts the
-line from an accepted-frame count into a reliability-controlled scene-level criterion, matching the
-formal 8-scene slice at 5/8 retained scenes.
+The cumulative ablations identify the main contributors inside UAV-TAlign. Adding robust scene
+consensus substantially improves edge and gradient alignment proxies while reducing severe
+outliers. Adding QA-aware verification then converts accepted-frame evidence into a
+reliability-controlled scene-level criterion, matching the formal 8-scene slice at 5/8 retained
+scenes.
 
 \begin{table}[t]
 \caption{Cumulative module ablation on the fixed 8-scene subset. Red/orange/yellow mark the best,
@@ -124,7 +122,7 @@ Full setting (8-scene slice) & \cmark & \cmark & \cmark & 5/8 & \best{80.4} & \b
 \end{table}
 
 The completed random-selection supplement further shows a 4/8 to 7/8 spread across seeds on the
-same fixed subset. We therefore present deterministic-even selection as a reproducible default
+same fixed subset. Deterministic-even selection therefore serves as a reproducible default
 operating policy, while robust consensus and QA-aware verification remain the primary empirical
 drivers.
 
