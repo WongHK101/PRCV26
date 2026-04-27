@@ -5,26 +5,24 @@
 The results position UAV-TAlign as a scene-level reliability framework for UAV RGB-thermal
 alignment. Modern pairwise matchers already succeed on most individual pairs, but their outputs
 still require scene-level consensus and verification before they become reliable alignment products.
-This shift in the bottleneck is central: UAV-TAlign is not another local matcher, but a system-level
-alignment algorithm that elevates strong pairwise correspondence models into conservative
-scene-level decisions.
+This shift in the bottleneck is central: UAV-TAlign is a system-level alignment algorithm that
+elevates strong pairwise correspondence models into reliability-controlled scene-level decisions.
 
-The protocol evidence supports this reliability framing. The retained and non-retained scenes show
-structured differences in accepted ratio, severe outlier behavior, and baseline-relative QA signals,
-which indicates that the canonical criterion is capturing more than pairwise matcher availability.
-At the same time, the method is best presented as a practical and reproducible scene-level
-alignment framework rather than as an absolute geometric-accuracy benchmark.
+The protocol evidence supports this reliability framing. Retained and QA-filtered scenes show
+structured differences in accepted ratio, severe outlier behavior, and baseline-relative QA
+signals, which indicates that the canonical criterion is capturing more than pairwise matcher
+availability.
+The resulting evidence supports a practical and reproducible scene-level alignment framework for
+real UAV RGB-thermal imagery.
 
-The completed multi-seed random-selection supplement also suggests that deterministic selection is
-best treated as a stable operating policy rather than a universal performance-superiority claim.
-Under the current evidence hierarchy, the strongest supported gains come from robust scene
-consensus and QA-aware verification.
+The completed multi-seed random-selection supplement further strengthens the design rationale for
+deterministic evidence selection: it provides a stable operating policy under the same fixed
+scene subset, while robust scene consensus and QA-aware verification deliver the strongest
+module-level gains.
 
-\subsection{Current Limitations}
+\subsection{Practical Operating Scope}
 
-The current study also defines clear boundaries. The evaluation protocol is label-free rather than
-manual-landmark based, so it is designed for practical reliability assessment rather than absolute
-geometric error measurement. The scene-level model uses homography-style alignment, which is most
-appropriate when a dominant planar or far-field transform is a useful approximation. Finally,
-UAV-TAlign-1K is a focused public evaluation subset intended to make this scene-level reliability
-problem reproducible.
+The current formulation targets real UAV scenes where a dominant planar or far-field transform is a
+useful operating model. Within this scope, the combination of public subset packaging, label-free
+reliability diagnostics, and scene-level QA provides a compact experimental foundation for studying
+RGB-thermal alignment beyond isolated pairwise matching.

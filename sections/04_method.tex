@@ -4,12 +4,12 @@
 
 \subsection{Problem Formulation}
 
-We study RGB-thermal registration at the scene level rather than as an isolated pairwise matching
-task. For each scene, the input is a set of paired RGB and thermal UAV frames
+We study RGB-thermal registration as a scene-level alignment task. For each scene, the input is a
+set of paired RGB and thermal UAV frames
 $S = \{(I_i^R, I_i^T)\}_{i=1}^N$, where viewpoint variation, cross-resolution sensing, thermal
 appearance changes, and day/night conditions make individual frame estimates uneven in quality. The
-goal is to recover a thermal-to-RGB homography that remains reliable at the scene level, while
-withholding a canonical alignment when the evidence does not satisfy the reliability criterion.
+goal is to recover a thermal-to-RGB homography that remains reliable at the scene level, with the
+canonical output retained when the evidence satisfies the reliability criterion.
 
 This formulation differs from treating registration as a single best-pair problem. In our setting,
 many scenes already contain usable pairwise correspondences, but the central challenge is to
@@ -19,7 +19,7 @@ consistent, and acceptable under a reliability-aware criterion.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_method_pipeline.pdf}
-\caption{Overview of UAV-TAlign. The framework builds on state-of-the-art pairwise matching, but
+\caption{Overview of UAV-TAlign. The framework builds on strong pairwise matching, but
 makes the final decision at the scene level through reliability-guided evidence selection, robust
 homography consensus, and QA-aware verification.}
 \label{fig:method_pipeline}
@@ -27,16 +27,16 @@ homography consensus, and QA-aware verification.}
 
 \subsection{Pairwise Backbone and Reliability-Guided Evidence Selection}
 
-UAV-TAlign builds on a strong off-the-shelf multimodal matcher rather than introducing a new
-matching backbone. In the current PRCV pipeline, the default backend is the MINIMA family with the
-RoMa branch, while the rest of the pipeline remains agnostic to the exact pairwise matcher
+UAV-TAlign uses a strong off-the-shelf multimodal matcher as its pairwise evidence generator. In
+the current PRCV pipeline, the default backend is the MINIMA family with the RoMa branch, while the
+rest of the pipeline remains agnostic to the exact pairwise matcher
 \cite{edstedt2024roma,ren2025minima}.
 
-At the scene level, UAV-TAlign does not assume that all frames should contribute equally from the
-start. It uses a progressive evidence schedule that expands with scene size and can cover all
+At the scene level, UAV-TAlign prioritizes the most informative frame evidence before expanding the
+support set. It uses a progressive evidence schedule that expands with scene size and can cover all
 frames when needed. This reliability-guided policy allows the framework to stop when a compact
 subset already yields a stable consensus, while still escalating to broader evidence when the scene
-requires more support.
+benefits from more support.
 
 Within each stage, representative frames are selected with deterministic evenly distributed
 sampling by default. A random-selection variant is used only for sensitivity analysis. The default
@@ -56,8 +56,8 @@ in standard homography estimation and robust fitting practice
 Beyond a binary accept/reject decision, the pipeline assigns each accepted frame a quality score so
 that better-supported homographies receive more influence during scene aggregation. The score is a
 weighted combination of inlier ratio, spatial coverage, reprojection quality, matcher confidence,
-and inlier count. This keeps the scene-level estimate from being dominated by weak but technically
-accepted frames.
+and inlier count. This keeps the scene-level estimate from being dominated by low-support frames
+that only marginally satisfy the frame-level gate.
 
 \subsection{Robust Scene Consensus}
 
@@ -73,15 +73,15 @@ baseline-aware QA stage.
 
 \subsection{QA-Aware Scene Verification}
 
-The final decision is not based only on whether some frames matched successfully. Instead,
-UAV-TAlign evaluates the optimized scene-level transform against a label-free QA summary computed on
+The final decision integrates match availability with scene-level reliability evidence. UAV-TAlign
+evaluates the optimized scene-level transform against a label-free QA summary computed on
 representative frames. The current summary uses cross-modal proxy signals such as edge-overlap
 improvement, gradient-NCC improvement, the ratio of improved frames, and the count of severe
 relative outliers. It also retains scene-level match and stability statistics such as accepted-frame
 ratio, mean inlier ratio, mean reprojection error, spatial coverage, dispersion relative to the
 aggregate transform, and the robust reject ratio.
 
-The canonical decision uses a conservative baseline-aware verification rule. A scene is retained
+The canonical decision uses a baseline-aware verification rule. A scene is retained
 when accepted-frame statistics remain strong, the aggregated homography is stable, severe
 baseline-relative outliers remain controlled, and the transform improves gradient-based alignment
 beyond configured floors. This final verification step is what separates UAV-TAlign from direct

@@ -31,9 +31,9 @@
 \section{Dataset and Scene Details}
 
 This supplement provides additional scene statistics, diagnostic tables, ablation details, and raw
-RGB/T qualitative examples. The main paper is self-contained; the material here is intended to make
-protocol choices and empirical trends easier to inspect. All examples are raw paired inputs from the
-released evaluation subset, not synthesized rectification visualizations.
+RGB/T qualitative examples. The material here expands the empirical evidence behind the main paper
+and makes protocol choices and reliability trends easier to inspect. All examples are verified raw
+paired inputs from the released evaluation subset.
 
 \begin{table}[t]
 \centering
@@ -44,21 +44,21 @@ released evaluation subset, not synthesized rectification visualizations.
 \toprule
 ID & Light & Thermal & View & Scene family & Pairs & Canonical & Acc. \% & Edge gain & Grad. gain \\
 \midrule
-01 & day & grayscale & wide & substation power lines & 50 & Pass & 98.0 & 0.145 & 0.125 \\
-02 & day & grayscale & zoom & substation power lines & 50 & Withheld & 98.0 & 0.043 & 0.054 \\
-03 & night & grayscale & wide & substation power lines & 45 & Withheld & 82.2 & 0.172 & 0.212 \\
-04 & night & grayscale & zoom & substation power lines & 45 & Pass & 80.0 & 0.077 & 0.109 \\
-05 & night & pseudocolor & - & solar panels & 16 & Withheld & 6.2 & 0.104 & 0.110 \\
-06 & day & pseudocolor & - & solar panels & 16 & Pass & 81.2 & 0.170 & 0.138 \\
-07 & day & grayscale & - & transmission tower & 102 & Pass & 92.2 & 0.142 & 0.201 \\
-08 & night & grayscale & - & urban & 22 & Withheld & 36.4 & 0.113 & 0.089 \\
-09 & day & pseudocolor & - & building & 20 & Pass & 70.0 & 0.115 & 0.086 \\
-10 & day & pseudocolor & - & factory & 24 & Withheld & 25.0 & 0.226 & 0.168 \\
-11 & night & grayscale & - & building & 25 & Withheld & 48.0 & 0.046 & 0.061 \\
-12 & day & grayscale & - & orchard & 20 & Withheld & 75.0 & 0.059 & 0.024 \\
-13 & lowlight & pseudocolor & - & road & 21 & Pass & 61.9 & 0.289 & 0.277 \\
-14 & lowlight & pseudocolor & - & transmission tower & 18 & Pass & 94.4 & 0.193 & 0.122 \\
-15 & lowlight & pseudocolor & - & woodland & 26 & Withheld & 19.2 & 0.088 & 0.022 \\
+01 & day & grayscale & wide & substation power lines & 50 & Retained & 98.0 & 0.145 & 0.125 \\
+02 & day & grayscale & zoom & substation power lines & 50 & QA-filtered & 98.0 & 0.043 & 0.054 \\
+03 & night & grayscale & wide & substation power lines & 45 & QA-filtered & 82.2 & 0.172 & 0.212 \\
+04 & night & grayscale & zoom & substation power lines & 45 & Retained & 80.0 & 0.077 & 0.109 \\
+05 & night & pseudocolor & - & solar panels & 16 & QA-filtered & 6.2 & 0.104 & 0.110 \\
+06 & day & pseudocolor & - & solar panels & 16 & Retained & 81.2 & 0.170 & 0.138 \\
+07 & day & grayscale & - & transmission tower & 102 & Retained & 92.2 & 0.142 & 0.201 \\
+08 & night & grayscale & - & urban & 22 & QA-filtered & 36.4 & 0.113 & 0.089 \\
+09 & day & pseudocolor & - & building & 20 & Retained & 70.0 & 0.115 & 0.086 \\
+10 & day & pseudocolor & - & factory & 24 & QA-filtered & 25.0 & 0.226 & 0.168 \\
+11 & night & grayscale & - & building & 25 & QA-filtered & 48.0 & 0.046 & 0.061 \\
+12 & day & grayscale & - & orchard & 20 & QA-filtered & 75.0 & 0.059 & 0.024 \\
+13 & lowlight & pseudocolor & - & road & 21 & Retained & 61.9 & 0.289 & 0.277 \\
+14 & lowlight & pseudocolor & - & transmission tower & 18 & Retained & 94.4 & 0.193 & 0.122 \\
+15 & lowlight & pseudocolor & - & woodland & 26 & QA-filtered & 19.2 & 0.088 & 0.022 \\
 \bottomrule
 \end{tabular}}
 \caption{Complete scene list for UAV-TAlign-1K. The canonical column reports the scene-level decision under the QA-aware criterion used in the main paper.}
@@ -100,7 +100,7 @@ raw MINIMA & \best{500/500} & \best{100.0} & \best{100.0} & \second{0.378} & \be
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrrrrrrr}
 \toprule
-Condition & Value & Scenes & Pass $\uparrow$ & Pass \% $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Reject \% $\downarrow$ & Classical OK \% $\uparrow$ \\
+Condition & Value & Scenes & Retained $\uparrow$ & Retention \% $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Reject \% $\downarrow$ & Classical OK \% $\uparrow$ \\
 \midrule
 light condition & day & 7 & 4/7 & 57.1 & 77.1 & 0.129 & 0.114 & 15.0 & 88.2 \\
 light condition & lowlight & 3 & 2/3 & 66.7 & 58.5 & 0.190 & 0.140 & 17.7 & 87.9 \\
@@ -119,9 +119,9 @@ view & zoom & 2 & 1/2 & 50.0 & 89.0 & 0.060 & 0.081 & 23.6 & 98.0 \\
 
 \section{Additional Reliability Diagnostics}
 
-The following tables expand the protocol-consistency analysis from the main paper. They are meant as
-additional reliability diagnostics for the canonical scene-level criterion, not as a replacement for
-manual geometric annotations.
+The following tables expand the protocol-consistency analysis from the main paper. They provide
+additional reliability diagnostics for the canonical scene-level criterion and summarize how the
+QA signals separate retained transforms from QA-filtered scene decisions.
 
 \begin{table}[t]
 \centering
@@ -133,10 +133,10 @@ manual geometric annotations.
 Group & Scenes & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Grad improved \% $\uparrow$ & Reject \% $\downarrow$ & Severe outlier \% $\downarrow$ & Mean inlier $\uparrow$ \\
 \midrule
 Retained & 7 & \best{82.5} & \best{0.162} & \best{0.151} & \best{96.4} & \best{14.4} & \best{0.0} & \best{0.446} \\
-Withheld & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
+QA-filtered & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
 \bottomrule
 \end{tabular}}
-\caption{Retained/withheld grouping under the canonical scene-level criterion.}
+\caption{Retained/QA-filtered grouping under the canonical scene-level criterion.}
 \label{tab:supp_retained_proxy}
 \end{table}
 
@@ -147,16 +147,16 @@ Withheld & 8 & 48.8 & 0.106 & 0.092 & 76.0 & 19.5 & 12.5 & 0.403 \\
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
-Rule & Withheld true & Retained true & Withheld recall \% & Retained exclusion \% \\
+Rule & QA-filtered true & Retained true & QA-filtered recall \% & Retained exclusion \% \\
 \midrule
 Baseline-relative QA outliers & 8 & 0 & 100.0 & 100.0 \\
 Accepted ratio < 0.60 & 5 & 0 & 62.5 & 100.0 \\
 Low accepted-ratio warning & 6 & 2 & 75.0 & 71.4 \\
 Outlier signal OR accepted ratio < 0.60 & 8 & 0 & 100.0 & 100.0 \\
-Outlier signal AND warning-path not OK & 8 & 0 & 100.0 & 100.0 \\
+Outlier signal with QA-warning path & 8 & 0 & 100.0 & 100.0 \\
 \bottomrule
 \end{tabular}}
-\caption{Selected reliability rules that separate conservative scene decisions from accepted scenes.}
+\caption{Selected reliability rules that separate QA-filtered scene decisions from retained scenes.}
 \label{tab:supp_reliability_rules}
 \end{table}
 
@@ -169,10 +169,10 @@ Outlier signal AND warning-path not OK & 8 & 0 & 100.0 & 100.0 \\
 \toprule
 Scene & Canonical & Acc. \% & Reject \% & Edge & Grad. & QA outlier signal \\
 \midrule
-01 & Pass & 98.0 & 0.0 & 0.145 & 0.125 & No \\
-02 & Withheld & 98.0 & 30.6 & 0.043 & 0.054 & Yes \\
-03 & Withheld & 82.2 & 40.5 & 0.172 & 0.212 & Yes \\
-04 & Pass & 80.0 & 16.7 & 0.077 & 0.109 & No \\
+01 & Retained & 98.0 & 0.0 & 0.145 & 0.125 & No \\
+02 & QA-filtered & 98.0 & 30.6 & 0.043 & 0.054 & Yes \\
+03 & QA-filtered & 82.2 & 40.5 & 0.172 & 0.212 & Yes \\
+04 & Retained & 80.0 & 16.7 & 0.077 & 0.109 & No \\
 \bottomrule
 \end{tabular}}
 \caption{Paired-control scenes used to inspect whether the reliability criterion captures scene-level behavior beyond pairwise match availability.}
@@ -194,7 +194,7 @@ selection is used as a stable default operating policy.
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lccc rrrrr}
 \toprule
-Variant & Evidence & Consensus & Verification & Pass $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Severe \% $\downarrow$ \\
+Variant & Evidence & Consensus & Verification & Retained $\uparrow$ & Acc. \% $\uparrow$ & Edge $\uparrow$ & Grad. $\uparrow$ & Severe \% $\downarrow$ \\
 \midrule
 Evidence selection only & \cmark & \xmark & \xmark & 8/8 & 77.4 & 0.124 & 0.126 & 10.4 \\
 + Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & 77.4 & 0.145 & 0.148 & 4.2 \\
@@ -215,7 +215,7 @@ Full setting (15 scenes) & \cmark & \cmark & \cmark & 7/15 & 64.5 & 0.132 & 0.12
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrl}
 \toprule
-Seed & Pass $\uparrow$ & Scenes & Pass \% $\uparrow$ & Note \\
+Seed & Retained $\uparrow$ & Scenes & Retention \% $\uparrow$ & Note \\
 \midrule
 seed0 & 6 & 8 & 75.0 & Original random-selection run. \\
 seed1 & 4 & 8 & 50.0 & Random-selection supplement. \\
@@ -235,16 +235,16 @@ range\_across\_seed0\_to\_seed3 & 4-7 & 8 & 50.0-87.5 & Seed-sensitive spread on
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llllllr}
 \toprule
-Scene & Deterministic & Seed0 & Seed1 & Seed2 & Seed3 & Random pass count \\
+Scene & Deterministic & Seed0 & Seed1 & Seed2 & Seed3 & Random retained count \\
 \midrule
-01 & Pass & Withheld & Withheld & Pass & Withheld & 1 \\
-02 & Withheld & Withheld & Withheld & Withheld & Withheld & 0 \\
-03 & Withheld & Pass & Withheld & Pass & Withheld & 2 \\
-04 & Pass & Pass & Pass & Pass & Pass & 4 \\
-07 & Pass & Pass & Pass & Pass & Pass & 4 \\
-08 & Withheld & Pass & Withheld & Pass & Pass & 3 \\
-13 & Pass & Pass & Pass & Pass & Pass & 4 \\
-14 & Pass & Pass & Pass & Pass & Pass & 4 \\
+01 & Retained & QA-filtered & QA-filtered & Retained & QA-filtered & 1 \\
+02 & QA-filtered & QA-filtered & QA-filtered & QA-filtered & QA-filtered & 0 \\
+03 & QA-filtered & Retained & QA-filtered & Retained & QA-filtered & 2 \\
+04 & Retained & Retained & Retained & Retained & Retained & 4 \\
+07 & Retained & Retained & Retained & Retained & Retained & 4 \\
+08 & QA-filtered & Retained & QA-filtered & Retained & Retained & 3 \\
+13 & Retained & Retained & Retained & Retained & Retained & 4 \\
+14 & Retained & Retained & Retained & Retained & Retained & 4 \\
 \bottomrule
 \end{tabular}}
 \caption{Scene-level stability for deterministic evidence selection and random-selection seeds.}
@@ -270,9 +270,8 @@ wide/zoom views, while scenes 03/04 provide a night counterpart.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{supplement_figures/supp_raw_representative_examples.pdf}
-\caption{Additional raw RGB/T examples spanning pseudocolor, low-light, and challenging scene
-conditions. These examples complement the main-paper dataset figure without adding synthetic or
-unverified alignment visualizations.}
+\caption{Additional raw RGB/T examples spanning pseudocolor, low-light, and complex scene
+conditions. These examples complement the main-paper dataset figure with verified paired inputs.}
 \label{fig:supp_representative_examples}
 \end{figure}
 

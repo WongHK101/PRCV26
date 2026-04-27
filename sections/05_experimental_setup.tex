@@ -45,8 +45,8 @@ model from Kornia.
 
 The formal LoFTR result is obtained under a resize-aware inference setting. In the current full-run
 configuration, the longest image dimension used for matching is limited to 1600, and automatic
-mixed precision is disabled. This is a deployment-oriented memory-control choice, not a training
-modification or a special adaptation on UAV-TAlign-1K.
+mixed precision is disabled. This deployment setting preserves the public pretrained model while
+supporting consistent full-subset evaluation.
 
 All experiments were run in a Linux Conda environment with Python 3.10,
 PyTorch 2.0.1, torchvision 0.15.2, and CUDA 11.8. The repository-level experiment runners also

@@ -28,19 +28,18 @@
 
 \begin{abstract}
 UAV RGB-thermal alignment is a prerequisite for reliable aerial inspection, monitoring, and
-nighttime multimodal perception, yet it remains difficult to make a scene-level alignment decision
-from real cross-FOV aerial imagery. Modern multimodal matchers can already produce abundant
-pairwise correspondences, but viewpoint variation, cross-resolution sensing, thermal rendering
-changes, and low-light imagery make the resulting frame-level homographies uneven in quality. This
-reveals a gap between pairwise match availability and scene-level alignment reliability. We present
+nighttime multimodal perception, where real cross-FOV aerial imagery requires decisions that remain
+trustworthy at the scene level. Modern multimodal matchers can already produce abundant pairwise
+correspondences, but viewpoint variation, cross-resolution sensing, thermal rendering changes, and
+low-light imagery make the resulting frame-level homographies uneven in quality. This highlights a
+critical gap between pairwise match availability and scene-level alignment reliability. We present
 UAV-TAlign, a scene-level RGB-thermal alignment framework that turns strong pairwise multimodal
 matching into reliable scene-level decisions through reliability-guided evidence selection, robust
 homography consensus, and QA-aware verification. We further package UAV-TAlign-1K, a public
-evaluation subset with a label-free protocol for studying real UAV RGB-thermal alignment without
-requiring manual landmark annotation as a prerequisite. Experiments against classical and modern
-off-the-shelf baselines, protocol-consistency analysis, and cumulative module ablations show that
-the decisive gains come from scene-level consensus and reliability-aware verification rather than
-from pairwise matcher availability alone.
+evaluation subset with a scalable label-free protocol for real UAV RGB-thermal alignment.
+Experiments against classical and modern off-the-shelf baselines, protocol-consistency analysis,
+and cumulative module ablations show that the decisive gains come from scene-level consensus and
+reliability-aware verification rather than from pairwise matcher availability alone.
 
 \keywords{RGB-thermal registration \and UAV imagery \and multimodal alignment \and scene-level
 reliability}

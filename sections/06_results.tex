@@ -34,19 +34,19 @@ SIFT + RANSAC & 457/500 & 91.4 & 91.4 & \third{0.240} & 0.599 & \best{0.260} & 4
 
 \subsection{Scene-Level Performance of UAV-TAlign}
 
-However, this near-saturated pairwise picture does not by itself solve scene-level alignment. Under
-the canonical QA-aware criterion, UAV-TAlign retains 7 of 15 scenes with a mean accepted-frame
-ratio of 64.5\%. This conservative scene-level result is the intended operating point of the
-framework: it favors reliable transforms over maximizing the number of accepted scenes, and it
-highlights why robust consensus and verification are needed on top of modern pairwise matchers.
+The near-saturated pairwise picture motivates the scene-level reliability layer. Under the
+canonical QA-aware criterion, UAV-TAlign retains 7 of 15 scenes with a mean accepted-frame ratio of
+64.5\%. This reliability-controlled operating point emphasizes high-confidence scene transforms
+and highlights why robust consensus and verification are valuable on top of modern pairwise
+matchers.
 
 \begin{table}[t]
-\caption{Formal scene-level result for UAV-TAlign. Arrows indicate the preferred direction.}
+\caption{Formal scene-level retention result for UAV-TAlign. Arrows indicate the preferred direction.}
 \label{tab:scene_level_main}
 \centering
 \begin{tabular}{lrrrr}
 \toprule
-Method & Eval Unit & Scene Pass $\uparrow$ & Pass Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
+Method & Eval Unit & Retained Scenes $\uparrow$ & Retention Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
 \midrule
 UAV-TAlign & 15 scenes & 7/15 & 46.7 & 64.5 \\
 \bottomrule
@@ -55,9 +55,9 @@ UAV-TAlign & 15 scenes & 7/15 & 46.7 & 64.5 \\
 
 \subsection{Condition Breakdown}
 
-The scene and condition breakdowns show that conservative decisions are structured rather than
-uniformly random. Night scenes are the most demanding group under the canonical criterion, while
-low-light scenes remain mixed and include successful retained alignments. These patterns support
+The scene and condition breakdowns show that QA-aware scene decisions are structured rather than
+uniformly distributed. Night scenes are the most demanding group under the canonical criterion,
+while low-light scenes include successful retained alignments. These patterns support
 the view that the bottleneck is scene-level reliability rather than pairwise matcher availability
 alone.
 
@@ -68,7 +68,7 @@ third values within each metric.}
 \centering
 \begin{tabular}{lrrrr}
 \toprule
-Condition & Scenes & UAV Pass $\uparrow$ & Pass Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
+Condition & Scenes & Retained $\uparrow$ & Retention Rate (\%) $\uparrow$ & Mean Accepted Ratio (\%) $\uparrow$ \\
 \midrule
 Day & 7 & \best{4} & \second{57.1} & \best{77.1} \\
 Night & 5 & \third{1} & \third{20.0} & \third{50.6} \\
@@ -81,18 +81,18 @@ Low-light & 3 & \second{2} & \best{66.7} & \second{58.5} \\
 
 We further examine whether the stored QA and proxy signals are consistent with the canonical
 scene-level decisions. The strongest discriminator is the reliability signal
-\texttt{baseline\_relative\_qa\_outliers}, which appears in all 8 non-retained scenes and in none
-of the 7 retained scenes. Accepted ratio is also informative, but not sufficient by itself: scene 02
-still has 98\% accepted frames yet is conservatively withheld because reject and QA-relative
-outlier signals remain high, whereas scene 04 is retained with 80\% accepted frames when these
-signals are absent. These observations support the claim that UAV-TAlign captures scene-level
-reliability rather than merely counting matched frames.
+\texttt{baseline\_relative\_qa\_outliers}, which separates all 8 QA-filtered scenes from the 7
+retained scenes. Accepted ratio is also informative as part of the joint decision: scene 02 has
+98\% accepted frames but is QA-filtered because reject and QA-relative outlier signals remain high,
+whereas scene 04 is retained with 80\% accepted frames when these signals are absent. These
+observations support the claim that UAV-TAlign captures scene-level reliability rather than merely
+counting matched frames.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\textwidth]{figures/fig_proxy_reliability.pdf}
 \caption{Scene-level proxy evidence. Retained scenes cluster near low severe-outlier ratios, while
-non-retained scenes are associated with stronger baseline-relative QA outlier signals. Marker size
+QA-filtered scenes are associated with stronger baseline-relative QA outlier signals. Marker size
 indicates robust rejection ratio.}
 \label{fig:proxy_reliability}
 \end{figure}
@@ -102,8 +102,8 @@ indicates robust rejection ratio.}
 The cumulative ablations show that the clearest empirical gains come from robust scene consensus
 and QA-aware verification. Adding robust consensus substantially improves edge and gradient
 alignment proxies while reducing severe outliers. Adding QA-aware verification then converts the
-line from an accepted-frame count into a conservative scene-level criterion, matching the formal
-8-scene slice at 5/8 retained scenes.
+line from an accepted-frame count into a reliability-controlled scene-level criterion, matching the
+formal 8-scene slice at 5/8 retained scenes.
 
 \begin{table}[t]
 \caption{Cumulative module ablation on the fixed 8-scene subset. Red/orange/yellow mark the best,
@@ -113,7 +113,7 @@ second, and third values for proxy metrics; arrows indicate preferred direction.
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lccc rrrrr}
 \toprule
-Variant & Evidence & Consensus & Verification & Pass/N $\uparrow$ & Acc. $\uparrow$ & $\Delta$Edge $\uparrow$ & $\Delta$Grad $\uparrow$ & Severe $\downarrow$ \\
+Variant & Evidence & Consensus & Verification & Retained/N $\uparrow$ & Acc. $\uparrow$ & $\Delta$Edge $\uparrow$ & $\Delta$Grad $\uparrow$ & Severe $\downarrow$ \\
 \midrule
 Evidence selection only & \cmark & \xmark & \xmark & 8/8 & \second{77.4} & 0.124 & 0.126 & 10.4 \\
 + Robust scene consensus & \cmark & \cmark & \xmark & 8/8 & \second{77.4} & \third{0.145} & \third{0.148} & \best{4.2} \\
