@@ -5,9 +5,11 @@
 \subsection{Baselines}
 
 We evaluate both classical and learning-based baselines under an explicit off-the-shelf setting.
-All learning-based methods use public pretrained weights or public pretrained model interfaces, and
-none of the baselines are retrained or fine-tuned on UAV-TAlign-1K. This choice keeps the
-comparison focused on practical deployability rather than dataset-specific adaptation.
+All learning-based methods use public pretrained weights or public pretrained model interfaces and
+remain fixed on UAV-TAlign-1K. This choice keeps the comparison focused on practical deployability
+rather than dataset-specific adaptation.
+Unified inference wrappers are used only to standardize model loading, image I/O, homography
+fitting, and output schemas while preserving the public pretrained baseline settings.
 
 The classical baselines are SIFT + RANSAC and AKAZE + RANSAC. The deep pairwise baselines are
 Kornia LoFTR (pretrained="outdoor"), RoMa outdoor full, XoFTR-640, and raw MINIMA. Raw MINIMA uses
@@ -43,10 +45,10 @@ model from Kornia.
 
 \subsection{Evaluation Details}
 
-The LoFTR baseline is evaluated under a resize-aware inference setting. In the full-run
-configuration, the longest image dimension used for matching is limited to 1600, and automatic
-mixed precision is disabled. This deployment setting preserves the public pretrained model while
-supporting consistent full-subset evaluation.
+The LoFTR baseline is evaluated under a resize-aware inference setting. The longest image
+dimension used for matching is limited to 1600, and automatic mixed precision is disabled. This
+deployment setting preserves the public pretrained model while supporting consistent full-subset
+evaluation within the fixed deployment budget.
 
 All experiments were run in a Linux Conda environment with Python 3.10,
 PyTorch 2.0.1, torchvision 0.15.2, and CUDA 11.8. All evaluation outputs are written to isolated

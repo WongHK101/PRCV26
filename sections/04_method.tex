@@ -41,9 +41,8 @@ subset already yields a stable consensus, while still escalating to broader evid
 benefits from more support.
 
 Within each stage, representative frames are selected with deterministic evenly distributed
-sampling by default. A random-selection variant is used only for sensitivity analysis. The default
-policy is therefore framed as a reproducible operating choice that reduces seed-dependent drift and
-preserves uniform scene coverage.
+sampling by default. This default policy is used for reproducibility and stable scene coverage. A
+random-selection variant is reserved for sensitivity analysis and is reported separately.
 
 \subsection{Quality-Weighted Frame Geometry}
 
@@ -86,5 +85,4 @@ The canonical decision uses a baseline-aware verification rule. A scene is retai
 accepted-frame statistics remain strong, the aggregated homography is stable, severe
 baseline-relative outliers remain controlled, and the transform improves gradient-based alignment
 beyond configured floors. This final verification step gives UAV-TAlign its scene-level character:
-the framework optimizes for reliable alignment products rather than merely maximizing the number of
-matched frames.
+the framework prioritizes retained scene-level usability over unconditional scene acceptance.

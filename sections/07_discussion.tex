@@ -2,6 +2,8 @@
 
 \section{Discussion}
 
+\subsection{Why Scene-Level Reliability Becomes Central}
+
 The results position UAV-TAlign as a scene-level reliability framework for UAV RGB-thermal
 alignment. Modern pairwise matchers already provide abundant frame-level correspondences on
 UAV-TAlign-1K, which makes scene-level decision quality the central operating question. UAV-TAlign
@@ -19,7 +21,7 @@ deterministic evidence selection: it provides a stable operating policy under th
 scene subset, while robust scene consensus and QA-aware verification deliver the strongest
 module-level gains.
 
-\subsection{Practical Operating Scope}
+\subsection{Scope and Validity}
 
 UAV-TAlign targets real UAV scenes where a dominant planar or far-field transform is a useful
 operating model. Within this scope, the combination of public subset packaging, label-free
@@ -27,3 +29,10 @@ reliability diagnostics, and scene-level QA provides a compact experimental foun
 RGB-thermal alignment beyond isolated pairwise matching. This positioning is deliberately
 complementary to matcher-centric research: as pairwise correspondence models continue to improve,
 scene-level reliability control becomes increasingly important for deployable RGB-thermal systems.
+
+The protocol is designed for scalable reliability analysis, with manual landmark accuracy as a
+complementary evaluation target. Its QA proxies operate as scene-consistency diagnostics, and the
+canonical criterion is designed for reliability-oriented retention of scene-level transforms. The
+homography model is most appropriate when a dominant planar or far-field alignment is meaningful.
+UAV-TAlign-1K is therefore a focused public subset for this operating regime and provides a
+foundation that can be extended toward broader UAV RGB-thermal settings.
