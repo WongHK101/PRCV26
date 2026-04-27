@@ -2,49 +2,69 @@
 
 \section{Introduction}
 
-RGB-thermal alignment is a core capability for UAV inspection, monitoring, and low-light
-perception, where visible and thermal imagery provide complementary scene cues across
-multispectral pedestrian analysis, thermal object detection, visible-thermal tracking, and UAV
-multimodal perception
+RGB-thermal alignment is becoming a foundational capability for UAV inspection, monitoring, and
+nighttime multimodal perception. Visible imagery provides semantic and structural detail, while
+thermal imagery remains informative under illumination changes, smoke, haze, and low-light
+conditions. This complementarity has driven progress across multispectral pedestrian perception,
+thermal object detection, visible-thermal tracking, and UAV multimodal sensing
 \cite{hwang2015kaist,flir2018thermal,jia2021llvip,liu2022tardal,sun2022dronevehicle,zhang2022vtuav,li2022lasher,jiang2023antiuav}.
-In real deployments, however, reliable registration is difficult because UAV RGB-thermal data often
-combine viewpoint change, cross-resolution sensors, weak thermal texture, grayscale or pseudocolor
-thermal rendering, and day/night illumination variation. These factors make scene-level alignment
-substantially harder than standard same-view or near-same-view multimodal matching setups.
+For these systems to operate as fused sensors rather than separate streams, however, RGB and
+thermal observations must be aligned reliably at the scene level.
 
-Recent multimodal matchers have significantly improved pairwise cross-modal correspondence
-estimation, and strong off-the-shelf models can already produce usable registrations for many
-individual RGB-thermal pairs
+Real UAV RGB-thermal alignment is substantially more demanding than standard same-view image
+matching. Aerial platforms introduce viewpoint drift, cross-FOV capture, rolling scale changes, and
+cross-resolution sensors; thermal images further introduce weak texture, grayscale or pseudocolor
+rendering, and strong day/night appearance shifts. These factors make individual frame-level
+homographies uneven: some pairs are well supported, while others are geometrically unstable or
+visually plausible but unreliable. The practical question is therefore not only whether a matcher
+can produce correspondences for one pair, but whether a system can decide which scene-level
+alignment should be trusted.
+
+Recent pairwise matching has advanced rapidly. Transformer-based, dense, and multimodal matchers
+such as LoFTR, LightGlue, DKM, RoMa, XoFTR, and MINIMA have substantially improved correspondence
+availability under difficult appearance changes
 \cite{sarlin2020superglue,sun2021loftr,chen2022aspanformer,lindenberger2023lightglue,edstedt2023dkm,edstedt2024roma,tuzcuoglu2024xoftr,ren2025minima}.
-Yet our experiments show that high pairwise usability does not automatically translate into
-reliable scene-level alignment under realistic UAV conditions. This exposes a system-level gap:
-state-of-the-art pairwise matchers can make correspondences available, but UAV RGB-thermal
-alignment still requires a mechanism that consolidates evidence across a scene and verifies whether
-the resulting transform is reliable enough to use.
+Our experiments confirm this progress in the UAV RGB-thermal setting: strong off-the-shelf
+multimodal matchers already achieve near-saturated pairwise usability on UAV-TAlign-1K. Yet the
+same result also exposes a new bottleneck. Pairwise correspondences are often available, but
+available correspondences do not automatically yield a reliable scene-level alignment. The missing
+piece is a reliability layer that aggregates evidence across a scene, suppresses unstable
+homographies, and verifies whether the final transform should be retained.
 
-This observation motivates a shift in problem framing. Rather than treating UAV RGB-thermal
-registration primarily as a pairwise matching availability problem, we study it as a scene-level
-reliability problem. Under this view, the central question becomes how to convert strong but
-imperfect pairwise registrations into scene-level transforms that remain geometrically stable,
-internally consistent, and usable after QA-aware acceptance.
+This observation motivates a different framing of the problem. Instead of treating UAV
+RGB-thermal registration as another pairwise matching benchmark, we study it as a scene-level
+reliability problem. Under this view, modern matchers are powerful evidence generators,
+but the alignment algorithm must still answer three system-level questions: which frames should
+contribute evidence, how should multiple homographies be fused into a scene consensus, and when is
+the resulting transform reliable enough to use? This framing is especially important for UAV data,
+where retaining an unstable scene-level transform can be more harmful than conservatively
+withholding one.
 
-To address this problem, we present UAV-TAlign, a scene-level UAV RGB-thermal alignment framework
-that complements modern multimodal matchers rather than competing with them as another local
-matcher. UAV-TAlign combines reliability-guided evidence selection, robust homography consensus,
-and QA-aware scene verification to convert strong pairwise correspondences into scene-level
-alignment decisions. We further package UAV-TAlign-1K, a public subset and practical label-free
-evaluation setup for studying real UAV RGB-thermal alignment without requiring manual landmark
-annotation as a prerequisite.
+We present UAV-TAlign, a scene-level UAV RGB-thermal alignment framework designed around this
+reliability layer. UAV-TAlign complements modern pairwise matchers rather than replacing them. It
+uses reliability-guided evidence selection to obtain representative frame support, robust
+homography consensus to consolidate frame-level estimates, and QA-aware verification to retain only
+scene-level transforms that satisfy conservative reliability criteria. In this sense, UAV-TAlign
+elevates strong pairwise multimodal matching into a deployable scene-level alignment decision.
+
+We also package UAV-TAlign-1K, a public evaluation subset for real UAV RGB-thermal alignment. The
+subset contains 15 scenes and 500 RGB-thermal pairs spanning day, night, low-light, grayscale
+thermal, pseudocolor thermal, and wide/zoom scene conditions. Because dense manual geometric
+annotation is costly and can be ambiguous in weak-texture thermal regions, we accompany the subset
+with a label-free protocol that evaluates pairwise usability, scene-level retention, and
+reliability diagnostics. The protocol is not positioned as a replacement for absolute geometric
+ground truth; rather, it provides a practical and reproducible way to study scene-level alignment
+reliability under real UAV RGB-thermal conditions.
 
 Our contributions are threefold:
 \begin{itemize}
-\item We present UAV-TAlign, a scene-level UAV RGB-thermal alignment framework that elevates
-state-of-the-art pairwise multimodal matching into reliable scene-level alignment through
+\item We introduce UAV-TAlign, a scene-level UAV RGB-thermal alignment framework that turns strong
+pairwise multimodal matching into reliable scene-level decisions through
 reliability-guided evidence selection, robust homography consensus, and QA-aware verification.
-\item We package UAV-TAlign-1K as a public evaluation subset together with a practical label-free
-evaluation protocol for real UAV RGB-thermal alignment, without requiring manual landmark
-annotations as a prerequisite.
-\item Extensive baseline comparisons, protocol-consistency analysis, and cumulative module
-ablations show that the dominant empirical gains come from scene-level reliability modeling rather
-than pairwise matcher availability alone.
+\item We package UAV-TAlign-1K, a public UAV RGB-thermal evaluation subset with a label-free
+protocol for studying real cross-FOV aerial alignment without requiring manual landmark annotation
+as a prerequisite.
+\item Through strong off-the-shelf baselines, reliability diagnostics, and cumulative module
+ablations, we show that the dominant empirical gains arise from scene-level consensus and
+verification rather than pairwise matcher availability alone.
 \end{itemize}
