@@ -8,8 +8,8 @@ We evaluate both classical and learning-based baselines under an explicit off-th
 All learning-based methods use public pretrained weights or public pretrained model interfaces and
 remain fixed on UAV-TAlign-1K. This choice keeps the comparison focused on practical deployability
 rather than dataset-specific adaptation.
-Unified inference wrappers are used only to standardize model loading, image I/O, homography
-fitting, and output schemas while preserving the public pretrained baseline settings.
+Unified inference wrappers standardize model loading, image I/O, homography fitting, and output
+schemas while preserving the public pretrained baseline parameters and settings.
 
 The classical baselines are SIFT + RANSAC and AKAZE + RANSAC. The deep pairwise baselines are
 Kornia LoFTR (pretrained="outdoor"), RoMa outdoor full, XoFTR-640, and raw MINIMA. Raw MINIMA uses
