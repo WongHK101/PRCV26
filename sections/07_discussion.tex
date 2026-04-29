@@ -15,6 +15,8 @@ structured differences in accepted ratio, severe outlier behavior, and baseline-
 signals, indicating that the canonical criterion captures scene-level reliability beyond pairwise
 matcher availability. This gives the evaluation a clear diagnostic role: it identifies when
 abundant pairwise evidence becomes a trustworthy scene-level transform.
+The canonical scene criterion is designed for conservative retention of scene transforms, not for
+maximizing unconditional scene acceptance.
 
 The completed multi-seed random-selection supplement further strengthens the design rationale for
 deterministic evidence selection: it provides a stable operating policy under the same fixed
@@ -24,11 +26,11 @@ module-level gains.
 \subsection{Scope and Validity}
 
 UAV-TAlign targets real UAV scenes where a dominant planar or far-field transform is a useful
-operating model. Within this scope, the combination of public subset packaging, label-free
-reliability diagnostics, and scene-level QA provides a compact experimental foundation for studying
-RGB-thermal alignment beyond isolated pairwise matching. This positioning is deliberately
-complementary to matcher-centric research: as pairwise correspondence models continue to improve,
-scene-level reliability control becomes increasingly important for deployable RGB-thermal systems.
+operating model. Within this scope, public subset packaging, label-free diagnostics, and
+scene-level QA provide a compact experimental foundation for studying RGB-thermal alignment beyond
+isolated pairwise matching. This positioning is deliberately complementary to matcher-centric
+research: as correspondence models continue to improve, reliability control becomes increasingly
+important for deployable RGB-thermal systems.
 
 The protocol is designed for scalable reliability analysis and is not presented as a substitute for
 manual geometric ground truth. Its QA proxies operate as scene-consistency diagnostics, while
