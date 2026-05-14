@@ -32,6 +32,9 @@ build/
 # Generated preview copies for supplementary figures
 /supplement_figures/*.png
 
+# Local raw figure draft used to regenerate the publication-facing method pipeline
+/figures/framwork.pdf
+
 # OS / editor noise
 .DS_Store
 Thumbs.db
